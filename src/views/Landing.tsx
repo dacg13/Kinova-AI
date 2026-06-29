@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
 import { ShaderGradient, ShaderGradientCanvas } from 'shadergradient';
-import UnicornScene from 'unicornstudio-react';
 
 const fadeUp = {
   initial: { opacity: 0, y: 25 },
@@ -174,20 +173,20 @@ export const Landing: React.FC = () => {
       {/* Hero Section */}
       <section className="relative max-w-5xl mx-auto px-8 pt-20 pb-20 text-center z-10">
         
-        {/* Unicorn Studio 3D Canvas Showcase */}
+        {/* Animated Hero Video Showcase */}
         <motion.div
           {...fadeUp}
           transition={{ duration: 0.8 }}
           className="flex justify-center items-center w-full max-w-4xl mx-auto mb-12 overflow-hidden rounded-[24px] border border-white/8 bg-black/40 shadow-2xl backdrop-blur-md relative group hover:border-white/12 transition-all duration-300"
           style={{ height: '480px' }}
         >
-          <UnicornScene
-            projectId="5TbqYooqUpO1hN9NVDTk"
-            width="100%"
-            height="100%"
-            scale={1}
-            dpi={1.5}
-            sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.6/dist/unicornStudio.umd.js"
+          <video
+            src="/landing.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
           />
         </motion.div>
 
