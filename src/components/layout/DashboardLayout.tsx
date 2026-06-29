@@ -31,7 +31,7 @@ export const DashboardLayout: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 relative overflow-hidden">
       {/* Premium Dashboard Silhouette Background */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none opacity-20 dark:opacity-35 mix-blend-screen transition-opacity duration-500"
+        className="fixed inset-y-0 right-0 left-0 lg:left-72 z-0 bg-cover bg-center pointer-events-none opacity-20 dark:opacity-35 mix-blend-screen transition-opacity duration-500"
         style={{ backgroundImage: 'url("/dashboard-bg.png")' }}
       />
 
