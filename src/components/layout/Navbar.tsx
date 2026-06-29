@@ -25,7 +25,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
             <Activity className="h-4 w-4 text-white" />
           </div>
           <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-brand-600 to-brand-500 dark:from-brand-500 dark:to-brand-200 bg-clip-text text-transparent">
-            RecoverX
+            Kinova AI
           </span>
           <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-600 dark:text-brand-200">
             v1.0

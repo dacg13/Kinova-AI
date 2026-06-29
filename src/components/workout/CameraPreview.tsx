@@ -93,7 +93,7 @@ export const CameraPreview: React.FC<CameraPreviewProps> = ({
             <div className="space-y-1 max-w-sm">
               <h4 className="text-sm font-bold text-white uppercase tracking-wider">Camera Permissions Blocked</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                RecoverX needs camera access to perform postural evaluations. Please unlock camera access in your address bar settings and click retry.
+                Kinova AI needs camera access to perform postural evaluations. Please unlock camera access in your address bar settings and click retry.
               </p>
             </div>
             <button

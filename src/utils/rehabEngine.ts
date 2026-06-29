@@ -71,7 +71,7 @@ export const createInitialSessionState = (initialState: string): RehabSessionSta
 };
 
 /**
- * Main evaluation frame engine for RecoverX rehabilitation intelligence.
+ * Main evaluation frame engine for Kinova AI rehabilitation intelligence.
  */
 export const evaluateFrame = (
   landmarks: Point3D[],

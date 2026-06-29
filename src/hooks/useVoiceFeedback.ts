@@ -10,11 +10,23 @@ export const useVoiceFeedback = () => {
     }
 
     // Read options from local storage (synced with settings deck)
-    const isSpeechEnabledStr = localStorage.getItem('recoverx_speech_enabled');
-    const speechRateStr = localStorage.getItem('recoverx_speech_rate');
+    const settingsStr = localStorage.getItem('kinova_settings');
+    let isSpeechEnabled = true;
+    let speechRate = 1.0;
 
-    const isSpeechEnabled = isSpeechEnabledStr !== 'false'; // Default to true
-    const speechRate = speechRateStr ? parseFloat(speechRateStr) : 1.0;
+    if (settingsStr) {
+      try {
+        const parsed = JSON.parse(settingsStr);
+        if (parsed.enableVoice !== undefined) {
+          isSpeechEnabled = parsed.enableVoice;
+        }
+        if (parsed.voiceSpeed !== undefined) {
+          speechRate = parsed.voiceSpeed;
+        }
+      } catch (e) {
+        console.error('Error parsing settings in useVoiceFeedback', e);
+      }
+    }
 
     if (!isSpeechEnabled) {
       return;

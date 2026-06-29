@@ -23,7 +23,7 @@ export const Settings: React.FC = () => {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('recoverx_settings');
+    const saved = localStorage.getItem('kinova_settings');
     if (saved) {
       try {
         setSettings(JSON.parse(saved));
@@ -43,7 +43,7 @@ export const Settings: React.FC = () => {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem('recoverx_settings', JSON.stringify(settings));
+    localStorage.setItem('kinova_settings', JSON.stringify(settings));
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2500);
   };
