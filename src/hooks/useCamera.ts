@@ -62,7 +62,21 @@ export const useCamera = () => {
     };
 
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      let mediaStream: MediaStream;
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (err: any) {
+        if (err.name === 'OverconstrainedError') {
+          console.warn('OverconstrainedError encountered, retrying with relaxed camera constraints');
+          const fallbackConstraints: MediaStreamConstraints = {
+            audio: false,
+            video: targetDeviceId ? { deviceId: targetDeviceId } : true,
+          };
+          mediaStream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+        } else {
+          throw err;
+        }
+      }
       streamRef.current = mediaStream;
       setStream(mediaStream);
       setPermissionStatus('granted');
