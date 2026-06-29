@@ -128,9 +128,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const menuItems = getMenuItems();
 
   const activeClass =
-    'flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-brand-500/10 text-[var(--text-primary)] font-bold shadow-[inset_0_0_0_1px_rgba(99,102,241,0.2)] transition-all duration-300 relative group overflow-hidden';
+    'sidebar-active flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 relative group overflow-hidden';
   const inactiveClass =
-    'flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium transition-all duration-300 group';
+    'sidebar-inactive flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group';
 
   return (
     <>
@@ -144,7 +144,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       {/* Sidebar Drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-[var(--border-color)] bg-gradient-to-b from-[var(--bg-secondary)] to-[var(--bg-primary)] transition-transform duration-300 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col transition-transform duration-300 lg:static lg:translate-x-0 glass-panel ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
