@@ -34,18 +34,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const session: UserSession = {
       name,
       role,
-      onboardingCompleted: false,
+      onboardingCompleted: true, // Skip onboarding — go straight to dashboard
     };
-    // If it's not a patient, onboarding is implicitly completed
-    if (role !== 'patient') {
-      session.onboardingCompleted = true;
-    } else {
-      // Check if patient onboarding was already done in the past
-      const wasOnboarded = localStorage.getItem(`kinova_onboarded_${name}`);
-      if (wasOnboarded === 'true') {
-        session.onboardingCompleted = true;
-      }
-    }
     setUser(session);
     localStorage.setItem('kinova_user_session', JSON.stringify(session));
   };
