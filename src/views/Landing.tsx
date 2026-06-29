@@ -13,17 +13,9 @@ import {
 import { useNotifications } from '@/context/NotificationContext';
 
 export const Landing: React.FC = () => {
-  const navigate = navigateTo();
+  const navigate = useNavigate();
   const { showNotification } = useNotifications();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
-  function navigateTo() {
-    try {
-      return useNavigate();
-    } catch {
-      return (path: string) => { window.location.href = path; };
-    }
-  }
 
   const handleBookDemo = () => {
     showNotification('Demo request registered! Our clinical integration team will contact you within 24 hours.', 'success');

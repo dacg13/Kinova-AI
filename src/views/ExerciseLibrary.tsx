@@ -19,18 +19,10 @@ interface Exercise {
 }
 
 export const ExerciseLibrary: React.FC = () => {
-  const navigate = navigateTo();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedEx, setSelectedEx] = useState<Exercise | null>(null);
-
-  function navigateTo() {
-    try {
-      return useNavigate();
-    } catch {
-      return (path: string) => { window.location.href = path; };
-    }
-  }
 
   const exercises: Exercise[] = [
     {

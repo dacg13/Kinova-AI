@@ -6,26 +6,10 @@ import { Activity, Mail, Lock, User, Sparkles } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
 
 export const Auth: React.FC = () => {
-  const navigate = navigateTo();
-  const [searchParams] = getSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login, user } = useAuth();
   const { showNotification } = useNotifications();
-
-  function navigateTo() {
-    try {
-      return useNavigate();
-    } catch {
-      return (path: string) => { window.location.href = path; };
-    }
-  }
-
-  function getSearchParams() {
-    try {
-      return useSearchParams();
-    } catch {
-      return [new URLSearchParams(window.location.search)];
-    }
-  }
 
   const isSignUpMode = searchParams.get('signup') === 'true';
   const [isSignUp, setIsSignUp] = useState(isSignUpMode);

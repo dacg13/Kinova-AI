@@ -15,16 +15,8 @@ import { useAuth } from '@/context/AuthContext';
 import { ResponsiveContainer, AreaChart, Area, XAxis, Tooltip } from 'recharts';
 
 export const PatientDashboard: React.FC = () => {
-  const navigate = navigateTo();
+  const navigate = useNavigate();
   const { user } = useAuth();
-
-  function navigateTo() {
-    try {
-      return useNavigate();
-    } catch {
-      return (path: string) => { window.location.href = path; };
-    }
-  }
 
   const username = user?.name || 'Dhruv';
 

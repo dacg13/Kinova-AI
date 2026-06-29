@@ -12,17 +12,9 @@ import { usePose } from '@/context/PoseContext';
 import { useNotifications } from '@/context/NotificationContext';
 
 export const PatientOnboarding: React.FC = () => {
-  const navigate = navigateTo();
+  const navigate = useNavigate();
   const { completeOnboarding } = useAuth();
   const { showNotification } = useNotifications();
-
-  function navigateTo() {
-    try {
-      return useNavigate();
-    } catch {
-      return (path: string) => { window.location.href = path; };
-    }
-  }
 
   const [step, setStep] = useState(1);
   const [age, setAge] = useState('32');
@@ -49,7 +41,8 @@ export const PatientOnboarding: React.FC = () => {
 
   useEffect(() => {
     setVideoElement(videoRef.current);
-  }, [videoRef, setVideoElement]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setVideoElement]);
 
   useEffect(() => {
     setStreamActive(!!stream);

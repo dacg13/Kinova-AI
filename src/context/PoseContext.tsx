@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from 'react';
 import type { Landmark, PoseResults, Pose } from '@/types/mediapipe';
 
 interface PoseContextType {
@@ -30,17 +30,17 @@ export const PoseProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const processingRef = useRef<boolean>(false);
 
   // Toggle visual overlays for joint names and debug telemetry window
-  const toggleDebugMode = () => {
+  const toggleDebugMode = useCallback(() => {
     setDebugMode((prev) => !prev);
-  };
+  }, []);
 
-  const setVideoElement = (video: HTMLVideoElement | null) => {
+  const setVideoElement = useCallback((video: HTMLVideoElement | null) => {
     videoRef.current = video;
-  };
+  }, []);
 
-  const setStreamActive = (active: boolean) => {
+  const setStreamActive = useCallback((active: boolean) => {
     setIsStreamActive(active);
-  };
+  }, []);
 
   // Initialize MediaPipe Pose Client
   useEffect(() => {

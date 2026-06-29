@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { NotificationProvider } from '@/context/NotificationContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { PoseProvider } from '@/context/PoseContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 
 // Public Views
@@ -62,7 +63,7 @@ const App: React.FC = () => {
               {/* Public Routes */}
               <Route path="/" element={<MainRedirect />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/patient/onboarding" element={<PatientOnboarding />} />
+              <Route path="/patient/onboarding" element={<PoseProvider><PatientOnboarding /></PoseProvider>} />
 
               {/* Protected Dashboard Layout Routes */}
               <Route element={<DashboardLayout />}>
