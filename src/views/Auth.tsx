@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth, type UserRole } from '@/context/AuthContext';
 import { Activity, Mail, Lock, User, Sparkles, Zap, ArrowRight } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
+import { ShaderGradient, ShaderGradientCanvas } from 'shadergradient';
 
 interface DemoAccount {
   role: UserRole;
@@ -112,9 +113,64 @@ export const Auth: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#08090D] text-slate-100 flex flex-col justify-center items-center p-6 relative overflow-hidden font-sans">
 
-      {/* Ambient Background Glows */}
-      <div className="absolute top-[10%] left-[15%] w-[50%] h-[50%] bg-radial from-brand-600/8 to-transparent pointer-events-none z-0 rounded-full blur-3xl" />
-      <div className="absolute bottom-[10%] right-[15%] w-[50%] h-[50%] bg-radial from-cyan-600/5 to-transparent pointer-events-none z-0 rounded-full blur-3xl" />
+      {/* Ambient ShaderGradient Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
+        <ShaderGradientCanvas
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <ShaderGradient
+            {...({
+              animate: "on",
+              axesHelper: "on",
+              bgColor1: "#000000",
+              bgColor2: "#000000",
+              brightness: 1.1,
+              cAzimuthAngle: 180,
+              cDistance: 3.9,
+              cPolarAngle: 115,
+              cameraZoom: 1,
+              color1: "#5606ff",
+              color2: "#fe8989",
+              color3: "#000000",
+              destination: "onCanvas",
+              embedMode: "off",
+              envPreset: "city",
+              format: "gif",
+              fov: 45,
+              frameRate: 10,
+              gizmoHelper: "hide",
+              grain: "off",
+              lightType: "3d",
+              pixelDensity: 1,
+              positionX: -0.5,
+              positionY: 0.1,
+              positionZ: 0,
+              range: "disabled",
+              rangeEnd: 40,
+              rangeStart: 0,
+              reflection: 0.1,
+              rotationX: 0,
+              rotationY: 0,
+              rotationZ: 235,
+              shader: "defaults",
+              type: "waterPlane",
+              uAmplitude: 0,
+              uDensity: 1.1,
+              uFrequency: 5.5,
+              uSpeed: 0.2,
+              uStrength: 2.4,
+              uTime: 0,
+              wireframe: false,
+            } as any)}
+          />
+        </ShaderGradientCanvas>
+      </div>
 
       <div className="w-full max-w-md space-y-6 relative z-10">
 

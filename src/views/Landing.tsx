@@ -15,6 +15,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
+import { ShaderGradient, ShaderGradientCanvas } from 'shadergradient';
 
 const fadeUp = {
   initial: { opacity: 0, y: 25 },
@@ -79,10 +80,64 @@ export const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#08090D] text-slate-100 overflow-x-hidden font-sans relative selection:bg-brand-500/30">
       
-      {/* Ambient Aurora Backgrounds */}
-      <div className="fixed top-[-20%] left-[-15%] w-[60%] h-[60%] bg-radial from-brand-600/8 to-transparent pointer-events-none z-0 rounded-full blur-3xl animate-[mesh_20s_ease-in-out_infinite_alternate]" />
-      <div className="fixed top-[30%] right-[-15%] w-[50%] h-[50%] bg-radial from-emerald-500/5 to-transparent pointer-events-none z-0 rounded-full blur-3xl animate-[mesh_15s_ease-in-out_infinite_alternate-reverse]" />
-      <div className="fixed bottom-[-10%] left-[30%] w-[40%] h-[40%] bg-radial from-violet-500/5 to-transparent pointer-events-none z-0 rounded-full blur-3xl animate-[mesh_18s_ease-in-out_infinite_alternate]" />
+      {/* Ambient ShaderGradient Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
+        <ShaderGradientCanvas
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <ShaderGradient
+            {...({
+              animate: "on",
+              axesHelper: "off",
+              bgColor1: "#000000",
+              bgColor2: "#000000",
+              brightness: 1,
+              cAzimuthAngle: 180,
+              cDistance: 2.8,
+              cPolarAngle: 80,
+              cameraZoom: 9.1,
+              color1: "#606080",
+              color2: "#8d7dca",
+              color3: "#212121",
+              destination: "onCanvas",
+              embedMode: "off",
+              envPreset: "city",
+              format: "gif",
+              fov: 45,
+              frameRate: 10,
+              gizmoHelper: "hide",
+              grain: "on",
+              lightType: "3d",
+              pixelDensity: 1,
+              positionX: 0,
+              positionY: 0,
+              positionZ: 0,
+              range: "disabled",
+              rangeEnd: 40,
+              rangeStart: 0,
+              reflection: 0.1,
+              rotationX: 50,
+              rotationY: 0,
+              rotationZ: -60,
+              shader: "defaults",
+              type: "waterPlane",
+              uAmplitude: 0,
+              uDensity: 1.5,
+              uFrequency: 0,
+              uSpeed: 0.3,
+              uStrength: 1.5,
+              uTime: 8,
+              wireframe: false,
+            } as any)}
+          />
+        </ShaderGradientCanvas>
+      </div>
 
       {/* Floating Header */}
       <header className="sticky top-0 z-50 backdrop-blur-2xl bg-[#08090D]/70 border-b border-white/6 px-8 py-5 flex items-center justify-between">
