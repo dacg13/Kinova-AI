@@ -1,54 +1,69 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #f5f3ff;
-  --color-brand-100: #ede9fe;
-  --color-brand-200: #ddd6fe;
-  --color-brand-500: #8b5cf6;
-  --color-brand-600: #7c3aed;
-  --color-brand-700: #6d28d9;
-  --color-brand-800: #5b21b6;
-  --color-brand-950: #0f0b26;
+  --color-brand-50: #f4f6ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
 
-  /* Custom Status Colors */
+  /* Custom Status Colors - Softer & more premium */
   --color-success-bg: #10b981;
   --color-warning-bg: #f59e0b;
-  --color-error-bg: #ef4444;
+  --color-error-bg: #f43f5e;
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
   --animate-float: float 6s ease-in-out infinite;
-  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float-slow: float 10s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-mesh: mesh 15s ease infinite alternate;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-12px); }
+  }
+
+  @keyframes mesh {
+    0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+    50% { transform: scale(1.1) rotate(15deg); opacity: 0.5; }
+    100% { transform: scale(0.9) rotate(-15deg); opacity: 0.3; }
   }
 }
 
 /* Custom CSS variables for theme system */
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
   --border-color: #e2e8f0;
   --text-primary: #0f172a;
-  --text-secondary: #475569;
+  --text-secondary: #64748b;
   
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(226, 232, 240, 0.8);
-  --glass-blur: 16px;
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(226, 232, 240, 0.6);
+  --glass-blur: 24px;
 }
 
 html.dark {
-  --bg-primary: #070913;
-  --bg-secondary: rgba(15, 23, 42, 0.65);
-  --border-color: rgba(51, 65, 85, 0.4);
+  /* Rich Dark Theme (Premium Vercel/Linear feel) */
+  --bg-primary: #08090D; /* Very dark rich blue/black */
+  --bg-secondary: rgba(15, 17, 26, 0.4); 
+  --border-color: rgba(255, 255, 255, 0.06);
   --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --text-secondary: #8b9bb4;
   
-  --glass-bg: rgba(10, 15, 30, 0.7);
-  --glass-border: rgba(51, 65, 85, 0.35);
-  --glass-blur: 16px;
+  --glass-bg: rgba(13, 15, 23, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 24px;
 }
 
 body {
@@ -57,32 +72,38 @@ body {
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.5s ease, color 0.5s ease;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glowing Radial Ambient Backdrops in Dark Mode */
+/* Glowing Aurora Backdrops in Dark Mode - Layered for depth */
 html.dark::before {
   content: '';
   position: fixed;
-  top: -10%;
+  top: -15%;
   left: -10%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, rgba(139, 92, 246, 0) 70%);
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.07) 0%, rgba(99, 102, 241, 0) 60%);
   z-index: -99;
   pointer-events: none;
+  border-radius: 50%;
+  animation: mesh 20s ease-in-out infinite alternate;
 }
 html.dark::after {
   content: '';
   position: fixed;
-  bottom: -10%;
+  bottom: -20%;
   right: -10%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, rgba(16, 185, 129, 0) 70%);
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0) 65%);
   z-index: -99;
   pointer-events: none;
+  border-radius: 50%;
+  animation: mesh 15s ease-in-out infinite alternate-reverse;
 }
 
 /* Premium Layout & Glassmorphism Utilities */
@@ -98,28 +119,53 @@ html.dark::after {
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--border-color);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.03);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              border-color 0.3s ease,
+              background-color 0.3s ease;
 }
 
 .glass-card:hover {
-  border-color: rgba(139, 92, 246, 0.25);
-  box-shadow: 0 12px 40px 0 rgba(139, 92, 246, 0.05);
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 8px 32px -8px rgba(99, 102, 241, 0.08);
+  transform: translateY(-2px);
 }
 
 html.dark .glass-card {
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(180deg, rgba(20, 22, 35, 0.6) 0%, rgba(12, 14, 22, 0.8) 100%);
 }
 
 html.dark .glass-card:hover {
-  border-color: rgba(139, 92, 246, 0.35);
-  box-shadow: 0 16px 48px 0 rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 12px 48px -12px rgba(139, 92, 246, 0.12);
+  background: linear-gradient(180deg, rgba(26, 28, 45, 0.7) 0%, rgba(15, 17, 26, 0.9) 100%);
+}
+
+/* Subtle inner glow for premium feel */
+html.dark .glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -128,15 +174,21 @@ html.dark .glass-card:hover {
 
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 9999px;
+  border: 2px solid var(--bg-primary);
 }
 
 html.dark ::-webkit-scrollbar-thumb {
   background: #334155;
+  border: 2px solid var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 /* Keyframes for loading skeleton pulses */

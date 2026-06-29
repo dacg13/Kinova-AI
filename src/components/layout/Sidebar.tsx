@@ -169,9 +169,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const menuItems = getMenuItems();
 
   const activeClass =
-    'flex items-center gap-3 px-3.5 py-3 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-200 border-l-4 border-brand-500 font-semibold shadow-sm transition-all duration-200';
+    'flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-brand-500/10 text-[var(--text-primary)] font-bold shadow-[inset_0_0_0_1px_rgba(99,102,241,0.2)] transition-all duration-300 relative group overflow-hidden';
   const inactiveClass =
-    'flex items-center gap-3 px-3.5 py-3 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-l-4 border-transparent font-medium transition-all duration-200';
+    'flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium transition-all duration-300 group';
 
   return (
     <>

@@ -8,9 +8,18 @@ import {
   TrendingUp, 
   ChevronDown, 
   Play, 
-  Video
+  Video,
+  ArrowRight,
+  Sparkles,
+  Shield,
+  Zap
 } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
+
+const fadeUp = {
+  initial: { opacity: 0, y: 25 },
+  animate: { opacity: 1, y: 0 },
+};
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -36,33 +45,70 @@ export const Landing: React.FC = () => {
     }
   ];
 
+  const features = [
+    {
+      icon: Video,
+      title: 'Edge Computer Vision',
+      desc: 'Tracks 33 skeletal coordinates locally at 30 FPS. No sensitive video data is ever uploaded.',
+      gradient: 'from-brand-500/20 to-brand-600/5',
+      iconColor: 'text-brand-400',
+    },
+    {
+      icon: Smartphone,
+      title: 'Real-Time Vocal Feedback',
+      desc: 'AI-generated spoken coaching cues adjust your form mid-rep with throttled, clear guidance.',
+      gradient: 'from-emerald-500/20 to-emerald-600/5',
+      iconColor: 'text-emerald-400',
+    },
+    {
+      icon: TrendingUp,
+      title: 'Clinical Telemetry Logs',
+      desc: 'Compiles reps, ROM, accuracy, and consistency — all registered directly in therapist portals.',
+      gradient: 'from-violet-500/20 to-violet-600/5',
+      iconColor: 'text-violet-400',
+    },
+  ];
+
+  const stats = [
+    { value: '33', label: 'Body Landmarks', sub: 'per frame' },
+    { value: '30', label: 'Frames/Second', sub: 'real-time' },
+    { value: '6', label: 'Fault Types', sub: 'detected' },
+    { value: '0', label: 'Servers', sub: 'required' },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#070913] text-slate-100 overflow-x-hidden font-sans relative selection:bg-brand-500/30">
+    <div className="min-h-screen bg-[#08090D] text-slate-100 overflow-x-hidden font-sans relative selection:bg-brand-500/30">
       
-      {/* Decorative Blur Backdrops */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-radial from-violet-600/10 to-transparent pointer-events-none z-0" />
-      <div className="absolute top-[40%] right-[-10%] w-[50%] h-[50%] bg-radial from-emerald-500/5 to-transparent pointer-events-none z-0" />
+      {/* Ambient Aurora Backgrounds */}
+      <div className="fixed top-[-20%] left-[-15%] w-[60%] h-[60%] bg-radial from-brand-600/8 to-transparent pointer-events-none z-0 rounded-full blur-3xl animate-[mesh_20s_ease-in-out_infinite_alternate]" />
+      <div className="fixed top-[30%] right-[-15%] w-[50%] h-[50%] bg-radial from-emerald-500/5 to-transparent pointer-events-none z-0 rounded-full blur-3xl animate-[mesh_15s_ease-in-out_infinite_alternate-reverse]" />
+      <div className="fixed bottom-[-10%] left-[30%] w-[40%] h-[40%] bg-radial from-violet-500/5 to-transparent pointer-events-none z-0 rounded-full blur-3xl animate-[mesh_18s_ease-in-out_infinite_alternate]" />
 
       {/* Floating Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#070913]/60 border-b border-slate-800/60 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
-            <Activity className="h-4 w-4 text-white" />
+      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-[#08090D]/70 border-b border-white/6 px-8 py-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/25 border border-white/10">
+            <Activity className="h-5 w-5 text-white" />
           </div>
-          <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-brand-400 to-brand-100 bg-clip-text text-transparent">
-            Kinova AI
-          </span>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-[17px] tracking-tight text-white">
+              Kinova AI
+            </span>
+            <span className="text-[8px] uppercase font-bold tracking-[0.25em] text-slate-500 hidden sm:block">
+              Rehabilitation Intelligence
+            </span>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigate('/auth')} 
-            className="px-4 py-2 text-xs font-extrabold text-slate-300 hover:text-white transition-colors cursor-pointer"
+            className="px-5 py-2.5 text-sm font-bold text-slate-400 hover:text-white transition-all cursor-pointer"
           >
             Sign In
           </button>
           <button 
             onClick={() => navigate('/auth?signup=true')} 
-            className="px-5 py-2.5 text-xs font-black rounded-xl bg-brand-500 hover:bg-brand-600 text-white transition-all shadow-lg shadow-brand-500/20 cursor-pointer"
+            className="px-6 py-2.5 text-sm font-bold rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white transition-all shadow-lg shadow-brand-500/25 cursor-pointer hover:shadow-brand-500/40 hover:-translate-y-0.5"
           >
             Start Recovery
           </button>
@@ -70,139 +116,213 @@ export const Landing: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative max-w-5xl mx-auto px-6 pt-20 pb-16 text-center space-y-8 z-10">
+      <section className="relative max-w-5xl mx-auto px-8 pt-28 pb-20 text-center z-10">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 text-[10px] uppercase tracking-widest font-black text-brand-300 backdrop-blur-md"
+          {...fadeUp}
+          transition={{ duration: 0.7 }}
+          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/8 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-300 backdrop-blur-md mb-10"
         >
           <Brain className="h-3.5 w-3.5" />
           AI-Powered Rehabilitation Intelligence
         </motion.div>
         
         <motion.h1 
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl sm:text-6xl font-black tracking-tight leading-tight"
+          {...fadeUp}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="text-5xl sm:text-7xl font-black tracking-[-0.03em] leading-[1.1] mb-8"
         >
           Recover Smarter.<br />
-          <span className="bg-gradient-to-r from-brand-400 via-brand-500 to-emerald-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
             Move Better.
           </span>
         </motion.h1>
 
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium"
+          {...fadeUp}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium mb-12"
         >
-          Kinova AI uses computer vision, real-time pose estimation, and explainable AI to help patients perform physical therapy safely at home while providing therapists with clinical recovery insights.
+          Computer vision and real-time pose estimation to guide physical therapy at home — while giving therapists the clinical recovery insights they need.
         </motion.p>
 
         <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-4 pt-4"
+          {...fadeUp}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="flex flex-wrap justify-center gap-5"
         >
           <button 
             onClick={() => navigate('/auth?signup=true')} 
-            className="px-7 py-3.5 text-xs font-black rounded-xl bg-brand-500 hover:bg-brand-600 text-white transition-all shadow-xl shadow-brand-500/25 flex items-center gap-2 cursor-pointer"
+            className="px-8 py-4 text-sm font-bold rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white transition-all shadow-xl shadow-brand-500/30 flex items-center gap-2.5 cursor-pointer group hover:-translate-y-0.5 hover:shadow-brand-500/50"
           >
             <Play className="h-4 w-4 fill-current" />
             Start Recovery Flow
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </button>
           <button 
             onClick={handleBookDemo} 
-            className="px-7 py-3.5 text-xs font-black rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+            className="px-8 py-4 text-sm font-bold rounded-2xl bg-white/5 border border-white/8 text-slate-200 hover:text-white hover:bg-white/8 hover:border-white/15 transition-all cursor-pointer"
           >
             Book Clinical Demo
           </button>
         </motion.div>
       </section>
 
-      {/* Core Highlights Grid */}
-      <section className="max-w-6xl mx-auto px-6 py-16 z-10 relative">
-        <div className="text-center space-y-2 mb-12">
-          <h2 className="text-xl sm:text-2xl font-black text-white">Full-Spectrum Vision Coaching</h2>
-          <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">Built to optimize physical therapy accuracy</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl border border-slate-800/60 bg-slate-900/30 backdrop-blur-md space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center">
-              <Video className="h-5 w-5" />
+      {/* Stats Bar */}
+      <section className="relative z-10 max-w-5xl mx-auto px-8 pb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6"
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center p-6 rounded-[24px] bg-white/3 border border-white/6 backdrop-blur-md">
+              <div className="text-4xl font-black text-white tracking-tight">{stat.value}</div>
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">{stat.label}</div>
+              <div className="text-[10px] text-slate-600 font-medium mt-0.5">{stat.sub}</div>
             </div>
-            <h3 className="text-sm font-bold text-white">Edge Computer Vision</h3>
-            <p className="text-xs text-slate-400 leading-relaxed font-semibold">
-              Tracks 33 skeletal coordinates locally at 30 FPS. Captures movements in real-time without uploading sensitive video feeds to cloud databases.
-            </p>
-          </div>
-
-          <div className="p-6 rounded-2xl border border-slate-800/60 bg-slate-900/30 backdrop-blur-md space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-              <Smartphone className="h-5 w-5" />
-            </div>
-            <h3 className="text-sm font-bold text-white">Real-Time Vocal Feedback</h3>
-            <p className="text-xs text-slate-400 leading-relaxed font-semibold">
-              Generates natural spoken coaching cues to adjust alignment mid-rep (e.g., "Keep your neck straight"), throttled to prevent verbal spam.
-            </p>
-          </div>
-
-          <div className="p-6 rounded-2xl border border-slate-800/60 bg-slate-900/30 backdrop-blur-md space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center">
-              <TrendingUp className="h-5 w-5" />
-            </div>
-            <h3 className="text-sm font-bold text-white">Clinical Telemetry Logs</h3>
-            <p className="text-xs text-slate-400 leading-relaxed font-semibold">
-              Compiles reps accuracy scores, joint flexion range (ROM), consistency variances, and registers them directly in therapist portals.
-            </p>
-          </div>
-        </div>
+          ))}
+        </motion.div>
       </section>
 
-      {/* FAQs Section */}
-      <section className="max-w-4xl mx-auto px-6 py-16 z-10 relative">
-        <h2 className="text-xl sm:text-2xl font-black text-center text-white mb-10">Frequently Asked Questions</h2>
-        <div className="space-y-4">
-          {faqItems.map((item, idx) => (
-            <div key={idx} className="border border-slate-800/60 rounded-2xl bg-slate-900/35 overflow-hidden">
-              <button 
-                onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                className="w-full px-6 py-4 text-left flex items-center justify-between text-xs font-bold text-slate-200 hover:text-white cursor-pointer select-none"
-              >
-                <span>{item.q}</span>
-                <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${activeFaq === idx ? 'rotate-180' : ''}`} />
-              </button>
-              {activeFaq === idx && (
-                <p className="px-6 pb-4 text-[11px] text-slate-400 leading-relaxed font-semibold">
-                  {item.a}
-                </p>
-              )}
-            </div>
+      {/* Features Grid */}
+      <section className="max-w-6xl mx-auto px-8 py-20 z-10 relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center space-y-3 mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/6 text-[9px] uppercase tracking-[0.2em] font-bold text-slate-400">
+            <Sparkles className="h-3 w-3 text-brand-400" />
+            Core Capabilities
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">Full-Spectrum Vision Coaching</h2>
+          <p className="text-sm text-slate-500 font-medium max-w-xl mx-auto">Built to optimize physical therapy accuracy and compliance</p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature, idx) => (
+            <motion.div 
+              key={feature.title}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              className={`p-8 rounded-[24px] border border-white/6 bg-gradient-to-br ${feature.gradient} backdrop-blur-md space-y-5 group hover:border-white/12 hover:-translate-y-1 transition-all duration-300`}
+            >
+              <div className={`w-12 h-12 rounded-2xl bg-white/5 ${feature.iconColor} flex items-center justify-center border border-white/8 group-hover:scale-110 transition-transform`}>
+                <feature.icon className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">{feature.title}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                {feature.desc}
+              </p>
+            </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Call To Action Footer */}
-      <footer className="border-t border-slate-850 bg-[#04060d]/80 py-12 px-6 text-center z-10 relative">
-        <div className="max-w-md mx-auto space-y-4">
-          <h3 className="text-lg font-black text-white">Start Your Rehabilitation Journey Today</h3>
-          <p className="text-xs text-slate-400 font-semibold leading-relaxed">
-            Begin custom, precision-monitored exercises with visual feedback, fully connected with your therapist.
+      {/* Trust/Security Section */}
+      <section className="max-w-5xl mx-auto px-8 py-16 z-10 relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="rounded-[24px] border border-white/6 bg-gradient-to-br from-white/3 to-transparent p-10 flex flex-col md:flex-row items-center gap-8 backdrop-blur-md"
+        >
+          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+            <Shield className="h-8 w-8 text-emerald-400" />
+          </div>
+          <div className="space-y-2 text-center md:text-left">
+            <h3 className="text-xl font-bold text-white">Privacy-First Architecture</h3>
+            <p className="text-sm text-slate-400 leading-relaxed font-medium max-w-xl">
+              All pose detection runs entirely in your browser using WebAssembly. Zero video data leaves your device. Zero external servers. HIPAA-compliant by design.
+            </p>
+          </div>
+          <div className="flex-shrink-0 flex gap-3">
+            <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">WASM</div>
+            <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">On-Device</div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="max-w-3xl mx-auto px-8 py-20 z-10 relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center space-y-3 mb-12"
+        >
+          <h2 className="text-3xl font-black text-white tracking-tight">Frequently Asked Questions</h2>
+          <p className="text-sm text-slate-500 font-medium">Everything you need to know about the platform</p>
+        </motion.div>
+        <div className="space-y-4">
+          {faqItems.map((item, idx) => (
+            <motion.div 
+              key={idx} 
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              className="border border-white/6 rounded-[20px] bg-white/3 overflow-hidden backdrop-blur-md hover:border-white/10 transition-all"
+            >
+              <button 
+                onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                className="w-full px-7 py-5 text-left flex items-center justify-between text-sm font-bold text-slate-200 hover:text-white cursor-pointer select-none transition-colors"
+              >
+                <span>{item.q}</span>
+                <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform duration-300 ${activeFaq === idx ? 'rotate-180' : ''}`} />
+              </button>
+              {activeFaq === idx && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <p className="px-7 pb-6 text-sm text-slate-400 leading-relaxed font-medium">
+                    {item.a}
+                  </p>
+                </motion.div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Footer */}
+      <footer className="border-t border-white/6 bg-[#05060a]/80 backdrop-blur-xl py-20 px-8 text-center z-10 relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-lg mx-auto space-y-6"
+        >
+          <div className="flex justify-center">
+            <div className="p-3 rounded-2xl bg-brand-500/10 border border-brand-500/20">
+              <Zap className="h-6 w-6 text-brand-400" />
+            </div>
+          </div>
+          <h3 className="text-2xl font-black text-white tracking-tight">Start Your Rehabilitation Journey</h3>
+          <p className="text-sm text-slate-500 font-medium leading-relaxed">
+            Begin precision-monitored exercises with AI feedback, fully connected with your therapist.
           </p>
           <button 
             onClick={() => navigate('/auth?signup=true')} 
-            className="w-full py-3 text-xs font-black rounded-xl bg-brand-500 hover:bg-brand-600 text-white transition-all shadow-lg shadow-brand-500/20 cursor-pointer"
+            className="w-full max-w-sm mx-auto py-4 text-sm font-bold rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white transition-all shadow-lg shadow-brand-500/25 cursor-pointer flex items-center justify-center gap-2 group hover:-translate-y-0.5 hover:shadow-brand-500/40"
           >
-            Create Your Active Account
+            Create Your Account
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </button>
-        </div>
-        <div className="pt-10 text-[10px] text-slate-500 font-semibold">
-          &copy; {new Date().getFullYear()} Kinova AI. AI-Powered Rehabilitation Intelligence Platform.
+        </motion.div>
+        <div className="pt-16 text-[10px] text-slate-700 font-medium tracking-widest uppercase">
+          &copy; {new Date().getFullYear()} Kinova AI · AI-Powered Rehabilitation Intelligence
         </div>
       </footer>
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth, type UserRole } from '@/context/AuthContext';
-import { Activity, Mail, Lock, User, Sparkles, Zap } from 'lucide-react';
+import { Activity, Mail, Lock, User, Sparkles, Zap, ArrowRight } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
 
 interface DemoAccount {
@@ -12,9 +12,7 @@ interface DemoAccount {
   password: string;
   label: string;
   desc: string;
-  color: string;
-  bg: string;
-  border: string;
+  gradient: string;
   emoji: string;
 }
 
@@ -25,10 +23,8 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     email: 'dhruv@kinova-ai.com',
     password: 'demo1234',
     label: 'Patient',
-    desc: 'Recovery dashboard, exercises, AI coach',
-    color: 'text-violet-300',
-    bg: 'bg-violet-500/10 hover:bg-violet-500/20',
-    border: 'border-violet-500/40 hover:border-violet-400/70',
+    desc: 'Recovery dashboard & AI coach',
+    gradient: 'from-violet-500/20 to-violet-600/5',
     emoji: '🧑‍⚕️',
   },
   {
@@ -37,10 +33,8 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     email: 'robert@kinova-ai.com',
     password: 'demo1234',
     label: 'Therapist',
-    desc: 'Patient roster, protocol builder',
-    color: 'text-cyan-300',
-    bg: 'bg-cyan-500/10 hover:bg-cyan-500/20',
-    border: 'border-cyan-500/40 hover:border-cyan-400/70',
+    desc: 'Patient roster & protocols',
+    gradient: 'from-cyan-500/20 to-cyan-600/5',
     emoji: '👨‍⚕️',
   },
   {
@@ -49,10 +43,8 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     email: 'priya@kinova-ai.com',
     password: 'demo1234',
     label: 'Caregiver',
-    desc: 'Family compliance & alerts hub',
-    color: 'text-emerald-300',
-    bg: 'bg-emerald-500/10 hover:bg-emerald-500/20',
-    border: 'border-emerald-500/40 hover:border-emerald-400/70',
+    desc: 'Compliance & alerts hub',
+    gradient: 'from-emerald-500/20 to-emerald-600/5',
     emoji: '👩‍👦',
   },
   {
@@ -61,10 +53,8 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     email: 'admin@kinova-ai.com',
     password: 'demo1234',
     label: 'Hospital Admin',
-    desc: 'System telemetry & registrations',
-    color: 'text-amber-300',
-    bg: 'bg-amber-500/10 hover:bg-amber-500/20',
-    border: 'border-amber-500/40 hover:border-amber-400/70',
+    desc: 'System & registrations',
+    gradient: 'from-amber-500/20 to-amber-600/5',
     emoji: '🏥',
   },
 ];
@@ -82,7 +72,6 @@ export const Auth: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Auto-redirect if already logged in
   useEffect(() => {
     if (user) {
       if (user.role === 'patient') {
@@ -126,178 +115,163 @@ export const Auth: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#070913] text-slate-100 flex flex-col justify-center items-center p-4 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#08090D] text-slate-100 flex flex-col justify-center items-center p-6 relative overflow-hidden font-sans">
 
-      {/* Background Decorative Glows */}
-      <div className="absolute top-[20%] left-[20%] w-[45%] h-[45%] bg-radial from-violet-600/10 to-transparent pointer-events-none z-0" />
-      <div className="absolute bottom-[20%] right-[20%] w-[45%] h-[45%] bg-radial from-brand-600/5 to-transparent pointer-events-none z-0" />
+      {/* Ambient Background Glows */}
+      <div className="absolute top-[10%] left-[15%] w-[50%] h-[50%] bg-radial from-brand-600/8 to-transparent pointer-events-none z-0 rounded-full blur-3xl" />
+      <div className="absolute bottom-[10%] right-[15%] w-[50%] h-[50%] bg-radial from-cyan-600/5 to-transparent pointer-events-none z-0 rounded-full blur-3xl" />
 
-      <div className="w-full max-w-md space-y-4 relative z-10">
+      <div className="w-full max-w-md space-y-6 relative z-10">
 
-        {/* ── JUDGE / DEMO PANEL ── */}
+        {/* Judge / Demo Panel */}
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="rounded-2xl border border-amber-500/30 bg-amber-500/5 backdrop-blur-md p-4 space-y-3"
+          transition={{ duration: 0.5 }}
+          className="rounded-[24px] border border-amber-500/20 bg-gradient-to-b from-amber-500/5 to-transparent backdrop-blur-xl p-5 space-y-4"
         >
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-amber-500/20">
-              <Zap className="h-3.5 w-3.5 text-amber-400" />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/20">
+              <Zap className="h-4 w-4 text-amber-400" />
             </div>
             <div>
-              <p className="text-[11px] font-black uppercase tracking-widest text-amber-400">
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-amber-400">
                 Judge / Demo Access
               </p>
-              <p className="text-[9px] text-slate-500 font-medium">
-                Click any role below to instantly sign in — no password required
+              <p className="text-[10px] text-slate-500 font-medium">
+                Click any role to instantly sign in
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             {DEMO_ACCOUNTS.map((acc) => (
               <motion.button
                 key={acc.role}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleDemoLogin(acc)}
-                className={`group flex flex-col items-start p-3 rounded-xl border transition-all duration-200 cursor-pointer text-left ${acc.bg} ${acc.border}`}
+                className={`group flex flex-col items-start p-4 rounded-2xl border border-white/8 bg-gradient-to-br ${acc.gradient} transition-all duration-300 cursor-pointer text-left hover:border-white/15 hover:shadow-lg`}
               >
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className="text-base leading-none">{acc.emoji}</span>
-                  <span className={`text-[11px] font-black ${acc.color}`}>{acc.label}</span>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-lg leading-none">{acc.emoji}</span>
+                  <span className="text-[12px] font-bold text-white">{acc.label}</span>
                 </div>
-                <span className="text-[9px] text-slate-500 leading-tight">{acc.desc}</span>
-                <span className="text-[8.5px] text-slate-600 mt-1 font-mono truncate w-full">{acc.email}</span>
+                <span className="text-[10px] text-slate-400 leading-tight">{acc.desc}</span>
               </motion.button>
             ))}
           </div>
-
-          <div className="border-t border-slate-800/60 pt-2 space-y-0.5">
-            <p className="text-[9px] text-slate-600 font-semibold uppercase tracking-wider">Demo Credentials (for manual entry)</p>
-            <div className="flex flex-wrap gap-x-4 gap-y-0.5">
-              {DEMO_ACCOUNTS.map((acc) => (
-                <span key={acc.role} className="text-[9px] text-slate-500 font-mono">
-                  <span className={`font-bold ${acc.color}`}>{acc.label}:</span> {acc.email} / {acc.password}
-                </span>
-              ))}
-            </div>
-          </div>
         </motion.div>
 
-        {/* ── MAIN LOGIN CARD ── */}
+        {/* Main Login Card */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="w-full glass-card rounded-3xl p-6 md:p-8 space-y-6 bg-slate-900/35 border border-slate-800/60 shadow-2xl backdrop-blur-xl"
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="w-full rounded-[24px] p-8 space-y-7 bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/8 shadow-2xl backdrop-blur-2xl"
         >
           {/* Brand Banner */}
-          <div className="text-center space-y-1">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/20 mx-auto">
-              <Activity className="h-5 w-5 text-white" />
+          <div className="text-center space-y-2">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/25 mx-auto border border-white/10">
+              <Activity className="h-6 w-6 text-white" />
             </div>
-            <h2 className="text-xl font-black tracking-tight text-white pt-2">
+            <h2 className="text-2xl font-extrabold tracking-tight text-white pt-3">
               {isSignUp ? 'Create your Account' : 'Welcome to Kinova AI'}
             </h2>
-            <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+            <p className="text-[11px] text-slate-500 font-bold uppercase tracking-[0.2em]">
               Rehabilitation Intelligence Platform
             </p>
           </div>
 
-          {/* Google Mock CTA */}
+          {/* Google CTA */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full py-2.5 rounded-xl border border-slate-800/60 hover:bg-slate-800/40 text-xs font-bold text-slate-200 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3 rounded-2xl border border-white/8 hover:border-white/15 hover:bg-white/5 text-sm font-bold text-slate-200 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group"
           >
-            <Sparkles className="h-4 w-4 text-brand-400" />
+            <Sparkles className="h-4 w-4 text-brand-400 group-hover:rotate-12 transition-transform" />
             Continue with Google
           </button>
 
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-slate-850"></div>
-            <span className="flex-shrink mx-4 text-[10px] text-slate-500 uppercase tracking-widest font-black">Or Use Mail</span>
-            <div className="flex-grow border-t border-slate-850"></div>
+          <div className="relative flex py-1 items-center">
+            <div className="flex-grow border-t border-white/6"></div>
+            <span className="flex-shrink mx-5 text-[9px] text-slate-600 uppercase tracking-[0.25em] font-bold">Or Use Mail</span>
+            <div className="flex-grow border-t border-white/6"></div>
           </div>
 
           {/* Main form */}
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs font-semibold leading-normal">
-
-            {/* Name Field in signup mode */}
+          <form onSubmit={handleSubmit} className="space-y-5 text-sm font-medium">
+            
             {isSignUp && (
-              <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Your Name</label>
+              <div className="space-y-2">
+                <label className="text-[10px] text-slate-500 uppercase tracking-[0.15em] font-bold">Your Name</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <User className="absolute left-4 top-3.5 h-4 w-4 text-slate-600" />
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Dhruv Patel"
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950/65 border border-slate-850 text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/5 border border-white/8 text-slate-200 placeholder:text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
                   />
                 </div>
               </div>
             )}
 
-            {/* Email field */}
-            <div className="space-y-1">
-              <label className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Email Address</label>
+            <div className="space-y-2">
+              <label className="text-[10px] text-slate-500 uppercase tracking-[0.15em] font-bold">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <Mail className="absolute left-4 top-3.5 h-4 w-4 text-slate-600" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="dhruv@kinova-ai.com"
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950/65 border border-slate-850 text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/5 border border-white/8 text-slate-200 placeholder:text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
                 />
               </div>
             </div>
 
-            {/* Password Field */}
-            <div className="space-y-1">
+            <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Password</label>
+                <label className="text-[10px] text-slate-500 uppercase tracking-[0.15em] font-bold">Password</label>
                 {!isSignUp && (
                   <button
                     type="button"
                     onClick={() => showNotification('Password recovery link sent to your registered email.', 'info')}
-                    className="text-[9px] text-brand-400 hover:text-brand-350 cursor-pointer"
+                    className="text-[10px] text-brand-400 hover:text-brand-300 cursor-pointer font-semibold transition-colors"
                   >
                     Forgot Password?
                   </button>
                 )}
               </div>
               <div className="relative">
-                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <Lock className="absolute left-4 top-3.5 h-4 w-4 text-slate-600" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950/65 border border-slate-850 text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/5 border border-white/8 text-slate-200 placeholder:text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
                 />
               </div>
             </div>
 
-            {/* Persona Role Card Selectors */}
-            <div className="space-y-2 pt-2">
-              <label className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Choose your Platform Persona</label>
-              <div className="grid grid-cols-2 gap-2">
+            {/* Role Selector */}
+            <div className="space-y-3 pt-1">
+              <label className="text-[10px] text-slate-500 uppercase tracking-[0.15em] font-bold">Choose Platform Persona</label>
+              <div className="grid grid-cols-2 gap-3">
                 {roleConfigs.map((role) => (
                   <div
                     key={role.id}
                     onClick={() => setSelectedRole(role.id as UserRole)}
-                    className={`p-3 rounded-xl border text-left cursor-pointer transition-all duration-200 ${
+                    className={`p-3.5 rounded-2xl border text-left cursor-pointer transition-all duration-300 ${
                       selectedRole === role.id
-                        ? 'border-brand-500 bg-brand-500/10 text-brand-300'
-                        : 'border-slate-850 bg-slate-950/30 text-slate-400 hover:border-slate-800'
+                        ? 'border-brand-500/40 bg-brand-500/10 shadow-[inset_0_0_0_1px_rgba(99,102,241,0.15)]'
+                        : 'border-white/6 bg-white/3 hover:border-white/12 hover:bg-white/5'
                     }`}
                   >
-                    <div className="font-bold text-[11px] text-slate-200">{role.label}</div>
-                    <div className="text-[9px] text-slate-500 leading-tight pt-0.5">{role.desc}</div>
+                    <div className={`font-bold text-[12px] ${selectedRole === role.id ? 'text-brand-300' : 'text-slate-300'} transition-colors`}>{role.label}</div>
+                    <div className="text-[10px] text-slate-600 leading-tight pt-0.5">{role.desc}</div>
                   </div>
                 ))}
               </div>
@@ -305,17 +279,18 @@ export const Auth: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20 pt-4 cursor-pointer"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25 cursor-pointer group hover:shadow-brand-500/40 hover:-translate-y-0.5"
             >
               {isSignUp ? 'Create your Account' : 'Authenticate Credentials'}
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
 
-          <div className="text-center text-[10px] text-slate-500 font-bold">
+          <div className="text-center text-[11px] text-slate-600 font-medium">
             {isSignUp ? 'Already registered?' : 'Need a new recovery setup?'}{' '}
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-brand-400 hover:underline cursor-pointer"
+              className="text-brand-400 hover:text-brand-300 cursor-pointer font-bold transition-colors"
             >
               {isSignUp ? 'Log in here' : 'Sign up here'}
             </button>
