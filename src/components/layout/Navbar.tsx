@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '@/context/ThemeContext';
-import { Sun, Moon, Bell, Activity, Menu } from 'lucide-react';
+import { Sun, Moon, Activity, Menu } from 'lucide-react';
 
 interface NavbarProps {
   onToggleSidebar: () => void;
@@ -36,11 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Notifications */}
-        <button className="relative p-2.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all text-[var(--text-secondary)] group">
-          <Bell className="h-4.5 w-4.5 group-hover:text-[var(--text-primary)] transition-colors" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(99,102,241,0.8)] animate-pulse"></span>
-        </button>
+
 
         {/* Theme Toggle */}
         <button
