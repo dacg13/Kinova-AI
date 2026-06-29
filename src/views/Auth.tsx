@@ -35,24 +35,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     desc: 'Patient roster & protocols',
     gradient: 'from-cyan-500/20 to-cyan-600/5',
   },
-  {
-    role: 'caregiver',
-    name: 'Priya Patel',
-    email: 'priya@kinova-ai.com',
-    password: 'demo1234',
-    label: 'Caregiver',
-    desc: 'Compliance & alerts hub',
-    gradient: 'from-emerald-500/20 to-emerald-600/5',
-  },
-  {
-    role: 'admin',
-    name: 'Admin User',
-    email: 'admin@kinova-ai.com',
-    password: 'demo1234',
-    label: 'Hospital Admin',
-    desc: 'System & registrations',
-    gradient: 'from-amber-500/20 to-amber-600/5',
-  },
 ];
 
 export const Auth: React.FC = () => {
@@ -74,10 +56,6 @@ export const Auth: React.FC = () => {
         navigate(user.onboardingCompleted ? '/patient/dashboard' : '/patient/onboarding');
       } else if (user.role === 'therapist') {
         navigate('/therapist/dashboard');
-      } else if (user.role === 'caregiver') {
-        navigate('/caregiver/dashboard');
-      } else if (user.role === 'admin') {
-        navigate('/admin/dashboard');
       }
     }
   }, [user, navigate]);
@@ -106,8 +84,6 @@ export const Auth: React.FC = () => {
   const roleConfigs = [
     { id: 'patient', label: 'Patient', desc: 'Perform recovery routines' },
     { id: 'therapist', label: 'Therapist', desc: 'Prescribe & track diagnostics' },
-    { id: 'caregiver', label: 'Caregiver', desc: 'Monitor patient compliance' },
-    { id: 'admin', label: 'Hospital/Admin', desc: 'Manage clinic credentials' },
   ];
 
   return (

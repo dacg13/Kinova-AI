@@ -25,12 +25,6 @@ import { Messages } from '@/views/Messages';
 import { TherapistHub } from '@/views/TherapistHub';
 import { ProtocolBuilder } from '@/views/ProtocolBuilder';
 
-// Protected Caregiver Views
-import { CaregiverHub } from '@/views/CaregiverHub';
-
-// Protected Admin Views
-import { AdminHub } from '@/views/AdminHub';
-
 // Settings View
 import { Settings } from '@/views/Settings';
 
@@ -42,12 +36,6 @@ const MainRedirect: React.FC = () => {
     }
     if (user.role === 'therapist') {
       return <Navigate to="/therapist/dashboard" replace />;
-    }
-    if (user.role === 'caregiver') {
-      return <Navigate to="/caregiver/dashboard" replace />;
-    }
-    if (user.role === 'admin') {
-      return <Navigate to="/admin/dashboard" replace />;
     }
   }
   return <Landing />;
@@ -82,12 +70,7 @@ const App: React.FC = () => {
                 <Route path="/therapist/protocol" element={<ProtocolBuilder />} />
                 <Route path="/therapist/messages" element={<Messages />} />
 
-                {/* Caregiver Routes */}
-                <Route path="/caregiver/dashboard" element={<CaregiverHub />} />
-                <Route path="/caregiver/messages" element={<Messages />} />
 
-                {/* Admin Routes */}
-                <Route path="/admin/dashboard" element={<AdminHub />} />
 
                 {/* Settings Route */}
                 <Route path="/settings" element={<Settings />} />

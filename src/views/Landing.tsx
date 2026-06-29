@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Activity, 
-  Brain, 
   Smartphone, 
   TrendingUp, 
   ChevronDown, 
@@ -190,22 +189,16 @@ export const Landing: React.FC = () => {
           />
         </motion.div>
 
-        <motion.div 
-          {...fadeUp}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/8 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-300 backdrop-blur-md mb-10"
-        >
-          <Brain className="h-3.5 w-3.5" />
-          AI-Powered Rehabilitation Intelligence
-        </motion.div>
-        
         <motion.h1 
           {...fadeUp}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-5xl sm:text-7xl font-black tracking-[-0.03em] leading-[1.1] mb-8"
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="text-5xl sm:text-7xl font-black tracking-[-0.04em] leading-[1.1] mb-8"
         >
-          Recover Smarter.<br />
-          <span className="bg-gradient-to-r from-brand-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+            Recover Smarter.
+          </span>
+          <br />
+          <span className="bg-gradient-to-r from-indigo-400 via-cyan-400 to-brand-300 bg-clip-text text-transparent drop-shadow-[0_4px_30px_rgba(99,102,241,0.25)]">
             Move Better.
           </span>
         </motion.h1>

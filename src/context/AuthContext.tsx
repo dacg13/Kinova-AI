@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-export type UserRole = 'patient' | 'therapist' | 'caregiver' | 'admin';
+export type UserRole = 'patient' | 'therapist';
 
 export interface UserSession {
   name: string;

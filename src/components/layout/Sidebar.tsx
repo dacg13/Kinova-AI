@@ -12,8 +12,7 @@ import {
   Heart,
   Sparkles,
   FileText,
-  MessageSquare,
-  Building
+  MessageSquare
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -113,46 +112,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           path: '/therapist/messages',
           icon: MessageSquare,
           desc: 'Patient messaging',
-        },
-        {
-          name: 'Settings',
-          path: '/settings',
-          icon: Settings,
-          desc: 'Platform configuration',
-        },
-      ];
-    }
-
-    if (user.role === 'caregiver') {
-      return [
-        {
-          name: 'Caregiver Hub',
-          path: '/caregiver/dashboard',
-          icon: Heart,
-          desc: 'Monitor care recipient',
-        },
-        {
-          name: 'Messages',
-          path: '/caregiver/messages',
-          icon: MessageSquare,
-          desc: 'Secure caregiver chat',
-        },
-        {
-          name: 'Settings',
-          path: '/settings',
-          icon: Settings,
-          desc: 'Platform configuration',
-        },
-      ];
-    }
-
-    if (user.role === 'admin') {
-      return [
-        {
-          name: 'Admin Hub',
-          path: '/admin/dashboard',
-          icon: Building,
-          desc: 'Hospital administrations',
         },
         {
           name: 'Settings',
