@@ -4,8 +4,6 @@ import {
   Flame, 
   Calendar, 
   AlertTriangle, 
-  Sparkles, 
-  ArrowRight, 
   TrendingUp, 
   Play, 
   Award,
@@ -78,15 +76,6 @@ export const PatientDashboard: React.FC = () => {
             Here is your clinical recovery snapshot for today.
           </p>
         </div>
-        <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl glass-card">
-          <div className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
-          </div>
-          <span className="text-[11px] uppercase font-bold tracking-widest text-[var(--text-primary)]">
-            Active Protocol v2.4
-          </span>
-        </div>
       </div>
 
       {/* Primary KPI Metrics Grid */}
@@ -158,10 +147,10 @@ export const PatientDashboard: React.FC = () => {
       </div>
 
       {/* Main Content Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8">
         
         {/* Weekly Trend Chart */}
-        <div className="lg:col-span-2 glass-card rounded-[24px] p-7 space-y-6 flex flex-col">
+        <div className="glass-card rounded-[24px] p-7 space-y-6 flex flex-col">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-brand-500/10 text-brand-500">
@@ -202,44 +191,6 @@ export const PatientDashboard: React.FC = () => {
             </ResponsiveContainer>
           </div>
         </div>
-
-        {/* AI Insight Feed */}
-        <div className="glass-card rounded-[24px] p-7 flex flex-col justify-between relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-brand-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
-          
-          <div className="space-y-6 relative z-10">
-            <h3 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400">
-                <Sparkles className="h-4 w-4" />
-              </div>
-              Kinova AI Insights
-            </h3>
-
-            <div className="space-y-4 text-[13px] text-[var(--text-secondary)] font-medium">
-              <div className="flex gap-3">
-                <div className="mt-0.5 text-brand-400 text-lg">📈</div>
-                <p><strong className="text-[var(--text-primary)]">ROM Progression:</strong> Left shoulder abduction reached <strong>132°</strong> yesterday, a 12% improvement.</p>
-              </div>
-              <div className="flex gap-3">
-                <div className="mt-0.5 text-emerald-400 text-lg">⚖️</div>
-                <p><strong className="text-[var(--text-primary)]">Alignment Symmetry:</strong> Shoulder imbalance was within 4% during squats, showing high symmetry.</p>
-              </div>
-              <div className="flex gap-3">
-                <div className="mt-0.5 text-orange-400 text-lg">⚠️</div>
-                <p><strong className="text-[var(--text-primary)]">Pacing Check:</strong> Squats performed at 3.8s per rep. Ensure you do not descend faster than 4s.</p>
-              </div>
-            </div>
-          </div>
-
-          <button 
-            onClick={() => navigate('/patient/coach')} 
-            className="w-full mt-8 py-3.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs font-bold hover:bg-brand-500 hover:text-white hover:border-brand-500 transition-all flex items-center justify-center gap-2 shadow-sm relative z-10 group/btn cursor-pointer"
-          >
-            Consult AI Recovery Coach
-            <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-          </button>
-        </div>
-
       </div>
 
       {/* Active Prescription Exercises */}
