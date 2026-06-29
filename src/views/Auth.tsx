@@ -13,7 +13,6 @@ interface DemoAccount {
   label: string;
   desc: string;
   gradient: string;
-  emoji: string;
 }
 
 const DEMO_ACCOUNTS: DemoAccount[] = [
@@ -25,7 +24,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     label: 'Patient',
     desc: 'Recovery dashboard & AI coach',
     gradient: 'from-violet-500/20 to-violet-600/5',
-    emoji: '🧑‍⚕️',
   },
   {
     role: 'therapist',
@@ -35,7 +33,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     label: 'Therapist',
     desc: 'Patient roster & protocols',
     gradient: 'from-cyan-500/20 to-cyan-600/5',
-    emoji: '👨‍⚕️',
   },
   {
     role: 'caregiver',
@@ -45,7 +42,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     label: 'Caregiver',
     desc: 'Compliance & alerts hub',
     gradient: 'from-emerald-500/20 to-emerald-600/5',
-    emoji: '👩‍👦',
   },
   {
     role: 'admin',
@@ -55,7 +51,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     label: 'Hospital Admin',
     desc: 'System & registrations',
     gradient: 'from-amber-500/20 to-amber-600/5',
-    emoji: '🏥',
   },
 ];
 
@@ -104,7 +99,7 @@ export const Auth: React.FC = () => {
 
   const handleDemoLogin = (account: DemoAccount) => {
     login(account.name, account.role);
-    showNotification(`🚀 Demo login successful! Welcome, ${account.name}.`, 'success');
+    showNotification(`Demo login successful! Welcome, ${account.name}.`, 'success');
   };
 
   const roleConfigs = [
@@ -128,10 +123,10 @@ export const Auth: React.FC = () => {
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="rounded-[24px] border border-amber-500/20 bg-gradient-to-b from-amber-500/5 to-transparent backdrop-blur-xl p-5 space-y-4"
+          className="w-full rounded-[24px] border border-amber-500/25 bg-gradient-to-b from-slate-900/60 to-slate-950/80 shadow-2xl backdrop-blur-2xl p-8 space-y-5"
         >
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/20">
+            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20">
               <Zap className="h-4 w-4 text-amber-400" />
             </div>
             <div>
@@ -148,13 +143,12 @@ export const Auth: React.FC = () => {
             {DEMO_ACCOUNTS.map((acc) => (
               <motion.button
                 key={acc.role}
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleDemoLogin(acc)}
-                className={`group flex flex-col items-start p-4 rounded-2xl border border-white/8 bg-gradient-to-br ${acc.gradient} transition-all duration-300 cursor-pointer text-left hover:border-white/15 hover:shadow-lg`}
+                className={`group flex flex-col items-start p-4 rounded-2xl border border-white/6 bg-gradient-to-br ${acc.gradient} transition-all duration-300 cursor-pointer text-left hover:border-white/12 hover:shadow-lg`}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg leading-none">{acc.emoji}</span>
                   <span className="text-[12px] font-bold text-white">{acc.label}</span>
                 </div>
                 <span className="text-[10px] text-slate-400 leading-tight">{acc.desc}</span>
