@@ -132,9 +132,9 @@ export const ExerciseLibrary: React.FC = () => {
       </div>
 
       {/* Search & Filter Bar Bar */}
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="sticky top-16 z-20 bg-[var(--bg-primary)]/90 backdrop-blur-md py-3 -mx-4 px-4 md:mx-0 md:px-0 border-b border-[var(--border-color)] md:border-none flex flex-col md:flex-row gap-4">
         <div className="relative flex-grow">
-          <Search className="absolute left-3.5 top-3 h-4 w-4 text-[var(--text-secondary)]" />
+          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-[var(--text-secondary)]" />
           <input 
             type="text" 
             placeholder="Search exercises by name, body part, or joint..." 
@@ -143,12 +143,12 @@ export const ExerciseLibrary: React.FC = () => {
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex overflow-x-auto gap-2 scrollbar-none snap-x snap-mandatory py-1 -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 snap-center ${
                 activeCategory === cat.id 
                   ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/10' 
                   : 'bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-slate-700'
@@ -161,9 +161,9 @@ export const ExerciseLibrary: React.FC = () => {
       </div>
 
       {/* Grid of Exercises */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map((ex) => (
-          <div key={ex.id} className="glass-card rounded-2xl p-5 border border-[var(--border-color)] flex flex-col justify-between h-[200px]">
+          <div key={ex.id} className="glass-card rounded-2xl p-5 border border-[var(--border-color)] flex flex-col justify-between h-auto min-h-[220px]">
             <div>
               <div className="flex justify-between items-start">
                 <div>
@@ -183,17 +183,17 @@ export const ExerciseLibrary: React.FC = () => {
               <div className="text-[10px] text-brand-500 font-bold pt-2">{ex.targetAngle}</div>
             </div>
 
-            <div className="flex gap-2.5 pt-4 border-t border-[var(--border-color)] mt-2">
+            <div className="flex flex-col sm:flex-row gap-2.5 pt-4 border-t border-[var(--border-color)] mt-4">
               <button 
                 onClick={() => setSelectedEx(ex)}
-                className="flex-grow py-2 border border-[var(--border-color)] text-[var(--text-primary)] font-bold text-xs rounded-xl hover:bg-slate-500/5 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                className="w-full sm:flex-grow py-2 border border-[var(--border-color)] text-[var(--text-primary)] font-bold text-xs rounded-xl hover:bg-slate-500/5 transition-colors flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Info className="h-4 w-4" />
                 Details
               </button>
               <button 
                 onClick={() => handleStartWorkout(ex.id)}
-                className="flex-grow py-2 bg-brand-500 hover:bg-brand-600 text-white font-extrabold text-xs rounded-xl transition-colors flex items-center justify-center gap-1 cursor-pointer shadow-lg shadow-brand-500/10"
+                className="w-full sm:flex-grow py-2 bg-brand-500 hover:bg-brand-600 text-white font-extrabold text-xs rounded-xl transition-colors flex items-center justify-center gap-1 cursor-pointer shadow-lg shadow-brand-500/10"
               >
                 <Play className="h-4 w-4 fill-current" />
                 Start

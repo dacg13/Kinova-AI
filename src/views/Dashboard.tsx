@@ -186,10 +186,13 @@ export const Dashboard: React.FC = () => {
       {/* Grid Stats */}
       <motion.div 
         variants={itemVariants}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 scrollbar-none snap-x snap-mandatory py-2 -mx-4 px-4 md:mx-0 md:px-0"
       >
         {statCards.map((card, i) => (
-          <div key={i} className="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-1">
+          <div 
+            key={i} 
+            className="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-1 shrink-0 w-[280px] snap-center md:shrink md:w-auto h-[150px] md:h-auto"
+          >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-[var(--text-secondary)]">{card.title}</span>
               <div className={`p-2 rounded-xl bg-gradient-to-tr ${card.color} text-white shadow-md`}>

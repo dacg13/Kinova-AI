@@ -56,7 +56,7 @@ export const ProtocolBuilder: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-140px)]">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto lg:h-[calc(100vh-140px)] pb-12 lg:pb-0">
       
       {/* Editor Panel */}
       <div className="glass-card rounded-2xl p-5 border border-[var(--border-color)] space-y-4 lg:col-span-1 flex flex-col justify-between overflow-y-auto">

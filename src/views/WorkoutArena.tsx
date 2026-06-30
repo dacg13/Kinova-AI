@@ -270,14 +270,14 @@ const WorkoutArenaContent: React.FC = () => {
           </CameraPreview>
 
           {/* Action Trigger Toolbar */}
-          <div className="flex items-center justify-between p-4 glass-card rounded-2xl">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-4 gap-4 glass-card rounded-2xl w-full">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               {!isSessionActive ? (
                 <button
                   onClick={handleStartSession}
                   aria-label="Start workout session"
                   tabIndex={0}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-brand-500 text-white font-bold text-xs hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/20 cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-500 text-white font-bold text-xs hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/20 cursor-pointer w-full sm:w-auto"
                 >
                   <Play className="h-3.5 w-3.5 fill-current" />
                   Start Exercise Session
@@ -287,7 +287,7 @@ const WorkoutArenaContent: React.FC = () => {
                   onClick={handleStopSession}
                   aria-label="Stop active workout session"
                   tabIndex={0}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-red-600 text-white font-bold text-xs hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-red-600 text-white font-bold text-xs hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 cursor-pointer w-full sm:w-auto"
                 >
                   <Square className="h-3.5 w-3.5 fill-current" />
                   Stop Exercise
@@ -295,7 +295,7 @@ const WorkoutArenaContent: React.FC = () => {
               )}
             </div>
             
-            <div className="flex items-center gap-4 text-xs font-semibold text-[var(--text-secondary)]">
+            <div className="flex items-center justify-between sm:justify-end gap-4 text-xs font-semibold text-[var(--text-secondary)] border-t sm:border-t-0 pt-2 sm:pt-0 border-[var(--border-color)]">
               <span className="flex items-center gap-1.5">
                 <Volume2 className="h-4 w-4" />
                 Vocal Biofeedback: On

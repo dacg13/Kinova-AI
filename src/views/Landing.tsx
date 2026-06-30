@@ -136,10 +136,8 @@ export const Landing: React.FC = () => {
             } as any)}
           />
         </ShaderGradientCanvas>
-      </div>
-
-      {/* Floating Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-[#08090D]/70 border-b border-white/6 px-8 py-5 flex items-center justify-between">
+      </div>      {/* Floating Header */}
+      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-[#08090D]/70 border-b border-white/6 px-4 sm:px-8 py-4 sm:py-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center shadow-lg shadow-brand-500/25 border border-white/10">
             <Activity className="h-5 w-5 text-white" />
@@ -153,31 +151,30 @@ export const Landing: React.FC = () => {
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2.5 sm:gap-4">
           <button 
             onClick={() => navigate('/auth')} 
-            className="px-5 py-2.5 text-sm font-bold text-slate-400 hover:text-white transition-all cursor-pointer"
+            className="px-3.5 sm:px-5 py-2 text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition-all cursor-pointer"
           >
             Sign In
           </button>
           <button 
             onClick={() => navigate('/auth?signup=true')} 
-            className="px-6 py-2.5 text-sm font-bold rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white transition-all shadow-lg shadow-brand-500/25 cursor-pointer hover:shadow-brand-500/40 hover:-translate-y-0.5"
+            className="px-4 sm:px-6 py-2 text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white transition-all shadow-lg shadow-brand-500/25 cursor-pointer hover:shadow-brand-500/40 hover:-translate-y-0.5"
           >
-            Start Recovery
+            Start
           </button>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative max-w-5xl mx-auto px-8 pt-20 pb-20 text-center z-10">
+      <section className="relative max-w-5xl mx-auto px-4 sm:px-8 pt-10 sm:pt-20 pb-16 sm:pb-20 text-center z-10">
         
         {/* Animated Hero Video Showcase */}
         <motion.div
           {...fadeUp}
           transition={{ duration: 0.8 }}
-          className="flex justify-center items-center w-full max-w-4xl mx-auto mb-12 overflow-hidden rounded-[24px] border border-white/8 bg-black/40 shadow-2xl backdrop-blur-md relative group hover:border-white/12 transition-all duration-300"
-          style={{ height: '480px' }}
+          className="flex justify-center items-center w-full max-w-4xl mx-auto mb-12 overflow-hidden rounded-[24px] border border-white/8 bg-black/40 shadow-2xl backdrop-blur-md relative group hover:border-white/12 transition-all duration-300 h-[220px] sm:h-[360px] md:h-[480px]"
         >
           <video
             src="/landing.mp4"
@@ -192,9 +189,9 @@ export const Landing: React.FC = () => {
         <motion.h1 
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="text-5xl sm:text-7xl font-black tracking-[-0.04em] leading-[1.1] mb-8"
+          className="text-[clamp(2rem,6vw,4.5rem)] font-black tracking-[-0.04em] leading-[1.1] mb-8"
         >
-          <span className="bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent animate-in fade-in duration-500">
             Recover Smarter.
           </span>
           <br />
@@ -206,7 +203,7 @@ export const Landing: React.FC = () => {
         <motion.p 
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium mb-12"
+          className="text-sm sm:text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed font-semibold mb-10"
         >
           Computer vision and real-time pose estimation to guide physical therapy at home — while giving therapists the clinical recovery insights they need.
         </motion.p>
@@ -214,11 +211,11 @@ export const Landing: React.FC = () => {
         <motion.div 
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-5"
+          className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-4 max-w-xs sm:max-w-none mx-auto w-full"
         >
           <button 
             onClick={() => navigate('/auth?signup=true')} 
-            className="px-8 py-4 text-sm font-bold rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white transition-all shadow-xl shadow-brand-500/30 flex items-center gap-2.5 cursor-pointer group hover:-translate-y-0.5 hover:shadow-brand-500/50"
+            className="px-8 py-3.5 text-sm font-bold rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white transition-all shadow-xl shadow-brand-500/30 flex items-center justify-center gap-2.5 cursor-pointer group hover:-translate-y-0.5 hover:shadow-brand-500/50"
           >
             <Play className="h-4 w-4 fill-current" />
             Start Recovery Flow
@@ -226,7 +223,7 @@ export const Landing: React.FC = () => {
           </button>
           <button 
             onClick={handleBookDemo} 
-            className="px-8 py-4 text-sm font-bold rounded-2xl bg-white/5 border border-white/8 text-slate-200 hover:text-white hover:bg-white/8 hover:border-white/15 transition-all cursor-pointer"
+            className="px-8 py-3.5 text-sm font-bold rounded-2xl bg-white/5 border border-white/8 text-slate-200 hover:text-white hover:bg-white/8 hover:border-white/15 transition-all cursor-pointer flex justify-center items-center"
           >
             Book Clinical Demo
           </button>

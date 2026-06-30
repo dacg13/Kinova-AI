@@ -79,10 +79,10 @@ export const PatientDashboard: React.FC = () => {
       </div>
 
       {/* Primary KPI Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 scrollbar-none snap-x snap-mandatory py-2 -mx-4 px-4 md:mx-0 md:px-0">
         
         {/* Recovery Score Card */}
-        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group">
+        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group shrink-0 w-[280px] snap-center md:shrink md:w-auto">
           <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-500"></div>
           <div className="flex justify-between items-start relative z-10">
             <span className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Recovery Score</span>
@@ -98,7 +98,7 @@ export const PatientDashboard: React.FC = () => {
         </div>
 
         {/* Daily Goals */}
-        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group">
+        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group shrink-0 w-[280px] snap-center md:shrink md:w-auto">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-500"></div>
           <div className="flex justify-between items-start relative z-10">
             <span className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Daily Routine</span>
@@ -113,7 +113,7 @@ export const PatientDashboard: React.FC = () => {
         </div>
 
         {/* Active Streak */}
-        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group">
+        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group shrink-0 w-[280px] snap-center md:shrink md:w-auto">
           <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-500"></div>
           <div className="flex justify-between items-start relative z-10">
             <span className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Active Streak</span>
@@ -129,7 +129,7 @@ export const PatientDashboard: React.FC = () => {
         </div>
 
         {/* Pain Level index */}
-        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group">
+        <div className="glass-card rounded-[24px] p-6 flex flex-col justify-between h-[180px] relative overflow-hidden group shrink-0 w-[280px] snap-center md:shrink md:w-auto">
           <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-500"></div>
           <div className="flex justify-between items-start relative z-10">
             <span className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Subjective Pain</span>
@@ -165,7 +165,7 @@ export const PatientDashboard: React.FC = () => {
 
           <div className="flex-1 min-h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={weeklyTrends} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+              <AreaChart data={weeklyTrends} margin={{ top: 10, right: 0, left: -25, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRom" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#818cf8" stopOpacity={0.4}/>
@@ -200,9 +200,9 @@ export const PatientDashboard: React.FC = () => {
           <p className="text-sm font-medium text-[var(--text-secondary)]">Click Start to initiate your tracking session</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {assignedExercises.map((ex) => (
-            <div key={ex.id} className="glass-card p-6 rounded-[24px] flex flex-col justify-between h-[190px] group cursor-pointer hover:-translate-y-1 transition-all duration-300">
+            <div key={ex.id} className="glass-card p-6 rounded-[24px] flex flex-col justify-between h-[210px] sm:h-[190px] group cursor-pointer hover:-translate-y-1 transition-all duration-300">
               <div>
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-2">
@@ -227,17 +227,18 @@ export const PatientDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center pt-4 mt-2">
+              <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-4 border-t border-[var(--border-color)] mt-2">
                 <span className="text-[10px] font-medium text-[var(--text-secondary)]">Prescribed by {ex.clinician}</span>
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
                     handleStartWorkout(ex.id);
                   }}
-                  className="w-10 h-10 rounded-full bg-brand-500 text-white flex items-center justify-center hover:scale-110 hover:bg-brand-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] transition-all cursor-pointer"
+                  className="w-full sm:w-10 h-10 rounded-xl sm:rounded-full bg-brand-500 text-white flex items-center justify-center hover:scale-105 sm:hover:scale-110 hover:bg-brand-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] transition-all cursor-pointer gap-2 font-bold text-xs"
                   aria-label="Start Workout"
                 >
                   <Play className="h-4 w-4 fill-current ml-0.5" />
+                  <span className="sm:hidden">Start Session</span>
                 </button>
               </div>
             </div>

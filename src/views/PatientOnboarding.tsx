@@ -107,7 +107,7 @@ export const PatientOnboarding: React.FC = () => {
                 <p className="text-[11px] text-[var(--text-secondary)]">Log metrics to calibrate joint weight thresholds</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">Age (Years)</label>
                   <input 
@@ -131,7 +131,7 @@ export const PatientOnboarding: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">Height (cm)</label>
                   <input 
@@ -243,7 +243,7 @@ export const PatientOnboarding: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-xs text-center font-bold">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-center font-bold">
                 <div className={`p-3.5 rounded-xl border ${isModelLoaded ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-600' : 'bg-slate-500/5 border-slate-500/10 text-[var(--text-secondary)]'}`}>
                   Pose Model Active
                 </div>

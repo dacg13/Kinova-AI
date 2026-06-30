@@ -598,7 +598,8 @@ export const TherapistHub: React.FC = () => {
                 </h3>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left border-collapse">
+                  {/* Desktop/Tablet Table Layout */}
+                  <table className="w-full text-xs text-left border-collapse hidden md:table">
                     <thead>
                       <tr className="border-b border-[var(--border-color)] text-[var(--text-secondary)] uppercase tracking-wider font-extrabold text-[10px]">
                         <th className="py-2.5">Date</th>
@@ -630,6 +631,42 @@ export const TherapistHub: React.FC = () => {
                       ))}
                     </tbody>
                   </table>
+
+                  {/* Mobile Cards Layout */}
+                  <div className="space-y-3 block md:hidden">
+                    {selectedPatient.sessions.map((session, idx) => (
+                      <div key={idx} className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] space-y-3 text-xs font-semibold">
+                        <div className="flex justify-between items-center pb-2 border-b border-[var(--border-color)]">
+                          <span className="font-extrabold text-[var(--text-primary)]">{session.date}</span>
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] uppercase font-bold ${
+                            session.mistakes === 0 
+                              ? 'bg-emerald-500/10 text-emerald-600' 
+                              : 'bg-amber-500/10 text-amber-600'
+                          }`}>
+                            {session.mistakes === 0 ? 'Perfect' : `${session.mistakes} errors`}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <span className="text-[8.5px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">Exercise</span>
+                            <span className="font-bold text-[var(--text-primary)] block mt-0.5">{session.exerciseName}</span>
+                          </div>
+                          <div>
+                            <span className="text-[8.5px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">Reps Prescribed</span>
+                            <span className="font-bold text-[var(--text-primary)] block mt-0.5">{session.reps} reps</span>
+                          </div>
+                          <div>
+                            <span className="text-[8.5px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">Form Accuracy</span>
+                            <span className="font-bold text-emerald-500 block mt-0.5">{session.accuracy}%</span>
+                          </div>
+                          <div>
+                            <span className="text-[8.5px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">Peak ROM</span>
+                            <span className="font-bold text-brand-500 block mt-0.5">{session.rom}°</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 

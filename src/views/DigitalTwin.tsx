@@ -5,7 +5,13 @@ import {
   Activity, 
   Gauge, 
   Compass, 
-  Orbit
+  Orbit,
+  RotateCcw,
+  RotateCw,
+  ZoomOut,
+  ChevronDown,
+  ChevronUp,
+  Info
 } from 'lucide-react';
 
 interface Point3D {
@@ -45,8 +51,12 @@ export const DigitalTwin: React.FC = () => {
   
   // Interactive Joint hover coordinate tracking
   const [hoveredJoint, setHoveredJoint] = useState<number | null>(null);
-  const [canvasDimensions, setCanvasDimensions] = useState({ width: 720, height: 500 });
+  const [canvasDimensions, setCanvasDimensions] = useState({ width: 480, height: 480 });
   
+  // Collapsible control states
+  const [isControlsCollapsed, setIsControlsCollapsed] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<'simulation' | 'camera' | 'data'>('simulation');
+
   const dragStart = useRef({ x: 0, y: 0 });
   const yawStart = useRef(0);
   const pitchStart = useRef(0);
@@ -184,16 +194,18 @@ export const DigitalTwin: React.FC = () => {
       const canvas = canvasRef.current;
       if (canvas && canvas.parentElement) {
         const rect = canvas.parentElement.getBoundingClientRect();
+        // Dynamic adaptive sizing for mobile compatibility
+        const computedSize = Math.max(280, Math.min(480, rect.width - 24));
         setCanvasDimensions({
-          width: Math.max(460, rect.width - 24),
-          height: 480
+          width: computedSize,
+          height: computedSize
         });
       }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [zoom]);
 
   // Drag interaction handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -221,7 +233,7 @@ export const DigitalTwin: React.FC = () => {
       // Check if mouse is hovering over any joint
       const cx = canvas.width / 2;
       const cy = canvas.height / 2;
-      const scale = 160 * zoom;
+      const scale = (canvas.width * 0.35) * zoom;
       const radYaw = (yaw * Math.PI) / 180;
       const radPitch = (pitch * Math.PI) / 180;
       const cosY = Math.cos(radYaw);
@@ -301,12 +313,12 @@ export const DigitalTwin: React.FC = () => {
 
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
-    const scale = 160 * zoom;
+    const scale = (canvas.width * 0.35) * zoom;
 
     // Cinematic Grid/Rings in background (Unreal Engine aesthetic)
     ctx.strokeStyle = 'rgba(99, 102, 241, 0.03)';
     ctx.lineWidth = 1;
-    for (let r = 80; r <= 320; r += 80) {
+    for (let r = 40; r <= 200; r += 40) {
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.stroke();
@@ -314,10 +326,10 @@ export const DigitalTwin: React.FC = () => {
     
     // Crosshair reference lines
     ctx.beginPath();
-    ctx.moveTo(cx, 40);
-    ctx.lineTo(cx, canvas.height - 40);
-    ctx.moveTo(40, cy);
-    ctx.lineTo(canvas.width - 40, cy);
+    ctx.moveTo(cx, 20);
+    ctx.lineTo(cx, canvas.height - 20);
+    ctx.moveTo(20, cy);
+    ctx.lineTo(canvas.width - 20, cy);
     ctx.stroke();
 
     // Projected matrices setup
@@ -639,7 +651,7 @@ export const DigitalTwin: React.FC = () => {
     if (!canvas) return [];
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
-    const scale = 160 * zoom;
+    const scale = (canvas.width * 0.35) * zoom;
     const radYaw = (yaw * Math.PI) / 180;
     const radPitch = (pitch * Math.PI) / 180;
     const cosY = Math.cos(radYaw);
@@ -695,183 +707,17 @@ export const DigitalTwin: React.FC = () => {
   const projectedJointPositions = getProjectedJointsCoordinates();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-140px)] min-h-[580px]">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto lg:h-[calc(100vh-140px)] min-h-[580px] lg:overflow-hidden pb-12 lg:pb-0">
       
-      {/* Parameters Panel (Left - 1/3) */}
-      <div className="glass-card rounded-[24px] p-5 border border-[var(--border-color)] flex flex-col justify-between overflow-y-auto space-y-4">
+      {/* 3D Skeleton Canvas Viewport (Mobile/Tablet First - Order 1) */}
+      <div className="lg:col-span-2 order-first lg:order-none glass-card rounded-[24px] border border-[var(--border-color)] flex flex-col items-center justify-between p-4 sm:p-6 relative bg-slate-950/40 overflow-hidden group shadow-2xl w-full min-h-[420px] sm:min-h-[500px]">
         
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h3 className="text-xs uppercase tracking-wider text-[var(--text-secondary)] font-extrabold flex items-center gap-1.5">
-              <Sliders className="h-4 w-4 text-brand-500" />
-              Digital Twin Controls
-            </h3>
-            <p className="text-[10px] text-[var(--text-secondary)] leading-relaxed">
-              Interact directly by dragging the model canvas or configure custom biomechanical simulation profiles below.
-            </p>
-          </div>
+        {/* Glowing vision backdrop */}
+        <div className="absolute top-10 left-1/4 w-[200px] h-[200px] bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+        <div className="absolute bottom-10 right-1/4 w-[250px] h-[250px] bg-cyan-500/5 rounded-full blur-[90px] pointer-events-none"></div>
 
-          {/* Interactive Simulation Modes */}
-          <div className="space-y-2 pt-2 border-t border-[var(--border-color)]">
-            <label className="text-[9px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">
-              Simulation Mode
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              <button 
-                onClick={() => setAnimationMode('static')}
-                className={`py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all cursor-pointer border ${animationMode === 'static' ? 'bg-brand-500/10 border-brand-500 text-brand-500 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)] hover:border-slate-600'}`}
-              >
-                Static Pose
-              </button>
-              <button 
-                onClick={() => setAnimationMode('squat')}
-                className={`py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all cursor-pointer border ${animationMode === 'squat' ? 'bg-brand-500/10 border-brand-500 text-brand-500 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)] hover:border-slate-600'}`}
-              >
-                Squat Loop
-              </button>
-              <button 
-                onClick={() => setAnimationMode('abduction')}
-                className={`py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all cursor-pointer border ${animationMode === 'abduction' ? 'bg-brand-500/10 border-brand-500 text-brand-500 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)] hover:border-slate-600'}`}
-              >
-                Abduction
-              </button>
-            </div>
-          </div>
-
-          {/* Yaw slider */}
-          <div className="space-y-1 text-xs font-semibold">
-            <div className="flex justify-between items-center text-[var(--text-primary)]">
-              <span className="flex items-center gap-1.5 text-[10px] text-slate-400">
-                <Orbit className="h-3.5 w-3.5 text-indigo-500" /> Yaw Rotation
-              </span>
-              <span className="text-[10px] bg-slate-900/60 px-1.5 py-0.5 rounded font-mono border border-white/5">{yaw}°</span>
-            </div>
-            <input 
-              type="range" 
-              min="0" 
-              max="360" 
-              value={yaw}
-              onChange={(e) => {
-                targetYaw.current = parseInt(e.target.value);
-                setYaw(parseInt(e.target.value));
-              }}
-              className="w-full h-1 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-indigo-500 border border-white/5"
-            />
-          </div>
-
-          {/* Pitch slider */}
-          <div className="space-y-1 text-xs font-semibold">
-            <div className="flex justify-between items-center text-[var(--text-primary)]">
-              <span className="flex items-center gap-1.5 text-[10px] text-slate-400">
-                <Compass className="h-3.5 w-3.5 text-brand-500" /> Pitch Rotation
-              </span>
-              <span className="text-[10px] bg-slate-900/60 px-1.5 py-0.5 rounded font-mono border border-white/5">{pitch}°</span>
-            </div>
-            <input 
-              type="range" 
-              min="-45" 
-              max="45" 
-              value={pitch}
-              onChange={(e) => {
-                targetPitch.current = parseInt(e.target.value);
-                setPitch(parseInt(e.target.value));
-              }}
-              className="w-full h-1 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-500 border border-white/5"
-            />
-          </div>
-
-          {/* Zoom slider */}
-          <div className="space-y-1 text-xs font-semibold">
-            <div className="flex justify-between items-center text-[var(--text-primary)]">
-              <span className="flex items-center gap-1.5 text-[10px] text-slate-400">
-                <ZoomIn className="h-3.5 w-3.5 text-emerald-500" /> Zoom Factor
-              </span>
-              <span className="text-[10px] bg-slate-900/60 px-1.5 py-0.5 rounded font-mono border border-white/5">{zoom.toFixed(2)}x</span>
-            </div>
-            <input 
-              type="range" 
-              min="0.6" 
-              max="1.8" 
-              step="0.05"
-              value={zoom}
-              onChange={(e) => {
-                targetZoom.current = parseFloat(e.target.value);
-                setZoom(parseFloat(e.target.value));
-              }}
-              className="w-full h-1 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-500 border border-white/5"
-            />
-          </div>
-
-          {/* Biomechanical highlight toggles */}
-          <div className="space-y-2 pt-2 border-t border-[var(--border-color)]">
-            <label className="text-[9px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">
-              Highlight Kinematic Chain
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              <button 
-                onClick={() => setSelectedJoint('shoulder')}
-                className={`py-2 rounded-xl text-[10px] font-extrabold uppercase transition-all cursor-pointer border ${selectedJoint === 'shoulder' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)] hover:border-slate-600'}`}
-              >
-                Shoulder Girdle
-              </button>
-              <button 
-                onClick={() => setSelectedJoint('knee')}
-                className={`py-2 rounded-xl text-[10px] font-extrabold uppercase transition-all cursor-pointer border ${selectedJoint === 'knee' ? 'bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)] hover:border-slate-600'}`}
-              >
-                Knee Kinematics
-              </button>
-            </div>
-          </div>
-
-          {/* Telemetry Stream simulation */}
-          <div className="flex justify-between items-center py-2.5 px-3 rounded-xl bg-slate-900/40 border border-[var(--border-color)]">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-[var(--text-primary)]">Telemetry stream</span>
-              <span className="text-[8px] text-[var(--text-secondary)] font-medium">Simulate sensor fluctuation</span>
-            </div>
-            <button 
-              onClick={() => setTelemetryStream(!telemetryStream)}
-              className={`w-9 h-5 rounded-full p-0.5 transition-all duration-300 relative ${telemetryStream ? 'bg-brand-500' : 'bg-slate-800'}`}
-            >
-              <div className={`w-4 h-4 bg-white rounded-full transition-transform duration-300 ${telemetryStream ? 'translate-x-4' : 'translate-x-0'}`}></div>
-            </button>
-          </div>
-        </div>
-
-        {/* Live Diagnostics Card */}
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-[var(--border-color)] space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <Activity className={`h-3 w-3 ${telemetryStream ? 'text-emerald-500 animate-pulse' : 'text-slate-500'}`} />
-              Diagnostics Output
-            </span>
-            <span className="text-[8px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-1.5 py-0.5 rounded">
-              Active
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 text-[10px] font-mono font-bold leading-normal">
-            <div className="bg-slate-950/40 p-2 rounded-lg border border-slate-800/40">
-              <div className="text-[8px] text-slate-500">Knee flexion</div>
-              <div className="text-cyan-400 text-sm mt-0.5">{currentKneeAngle}°</div>
-            </div>
-            <div className="bg-slate-950/40 p-2 rounded-lg border border-slate-800/40">
-              <div className="text-[8px] text-slate-500">Shoulder Abduct</div>
-              <div className="text-indigo-400 text-sm mt-0.5">{currentShoulderAngle}°</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3D Skeleton Canvas Viewport (Right - 2/3) */}
-      <div className="lg:col-span-2 glass-card rounded-[24px] border border-[var(--border-color)] flex flex-col items-center justify-between p-6 relative bg-slate-950/40 overflow-hidden group shadow-2xl">
-        
-        {/* Apple Vision Pro Ambient Background overlay glows inside card */}
-        <div className="absolute top-10 left-1/4 w-[250px] h-[250px] bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none"></div>
-        <div className="absolute bottom-10 right-1/4 w-[300px] h-[300px] bg-cyan-500/5 rounded-full blur-[90px] pointer-events-none"></div>
-
-        {/* Dynamic status stats indicators overlay */}
-        <div className="absolute top-4 left-4 p-3.5 rounded-xl bg-slate-900/80 border border-slate-800/70 backdrop-blur-md text-[10px] font-bold space-y-1.5 z-10 w-[180px] shadow-xl">
+        {/* Symmetry indices (Desktop absolute overlay, hidden on mobile) */}
+        <div className="absolute top-4 left-4 p-3.5 rounded-xl bg-slate-900/80 border border-slate-800/70 backdrop-blur-md text-[10px] font-bold space-y-1.5 z-10 w-[180px] shadow-xl hidden md:block">
           <div className="text-[9px] text-indigo-400 uppercase tracking-wider font-extrabold flex items-center gap-1.5">
             <Gauge className="h-3.5 w-3.5" />
             Symmetry Indices
@@ -890,14 +736,13 @@ export const DigitalTwin: React.FC = () => {
           </div>
         </div>
 
-        {/* Camera presets flying and hologram mode HUD widget */}
-        <div className="absolute top-4 right-4 flex flex-col gap-2 z-10 items-end">
+        {/* Hologram Settings Widget (Desktop absolute overlay, hidden on mobile) */}
+        <div className="absolute top-4 right-4 flex flex-col gap-2 z-10 items-end hidden md:flex">
           <div className="p-2 rounded-lg bg-slate-900/80 border border-slate-800/70 backdrop-blur-md text-[9px] font-extrabold uppercase text-slate-400 flex items-center gap-1.5">
             <Orbit className="h-3 w-3 text-indigo-400 animate-spin" style={{ animationDuration: '6s' }} />
             Direct Drag Enabled
           </div>
 
-          {/* Quick HUD Switches */}
           <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/70 backdrop-blur-md flex flex-col gap-1.5 items-center">
             <div className="text-[8px] uppercase tracking-wider text-slate-500 font-bold">Hologram Settings</div>
             <div className="flex bg-slate-950/60 p-1 rounded-lg border border-white/5 gap-1">
@@ -924,6 +769,38 @@ export const DigitalTwin: React.FC = () => {
           </div>
         </div>
 
+        {/* Floating Camera Control FABs (Visible on mobile & tablet) */}
+        <div className="absolute bottom-4 left-4 flex gap-2 md:hidden z-20 bg-slate-900/60 p-2 rounded-2xl border border-white/10 backdrop-blur-md">
+          <button 
+            onClick={() => targetYaw.current = (targetYaw.current - 15 + 360) % 360}
+            className="w-9 h-9 rounded-full bg-slate-950 border border-white/10 flex items-center justify-center text-slate-300 active:scale-90"
+            aria-label="Rotate Left"
+          >
+            <RotateCcw className="h-4 w-4" />
+          </button>
+          <button 
+            onClick={() => targetYaw.current = (targetYaw.current + 15) % 360}
+            className="w-9 h-9 rounded-full bg-slate-950 border border-white/10 flex items-center justify-center text-slate-300 active:scale-90"
+            aria-label="Rotate Right"
+          >
+            <RotateCw className="h-4 w-4" />
+          </button>
+          <button 
+            onClick={() => targetZoom.current = Math.max(0.6, targetZoom.current - 0.15)}
+            className="w-9 h-9 rounded-full bg-slate-950 border border-white/10 flex items-center justify-center text-slate-300 active:scale-90"
+            aria-label="Zoom Out"
+          >
+            <ZoomOut className="h-4 w-4" />
+          </button>
+          <button 
+            onClick={() => targetZoom.current = Math.min(1.8, targetZoom.current + 0.15)}
+            className="w-9 h-9 rounded-full bg-slate-950 border border-white/10 flex items-center justify-center text-slate-300 active:scale-90"
+            aria-label="Zoom In"
+          >
+            <ZoomIn className="h-4 w-4" />
+          </button>
+        </div>
+
         {/* 3D Holographic Rendering Area */}
         <div className="flex-1 flex items-center justify-center relative w-full select-none cursor-grab active:cursor-grabbing">
           <canvas 
@@ -934,7 +811,7 @@ export const DigitalTwin: React.FC = () => {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            className="max-w-full aspect-square"
+            className="max-w-full aspect-square border border-white/5 rounded-2xl bg-slate-950/20 shadow-inner"
           />
 
           {/* Floating Joint Diagnostics Card Overlay */}
@@ -968,12 +845,310 @@ export const DigitalTwin: React.FC = () => {
           )}
         </div>
 
-        <div className="text-[9px] text-[var(--text-secondary)] font-bold tracking-wider text-center mt-3 uppercase flex items-center gap-1.5">
+        <div className="text-[9px] text-[var(--text-secondary)] font-bold tracking-wider text-center mt-3 uppercase flex items-center justify-center gap-1.5">
           <Compass className="h-3.5 w-3.5 text-slate-500 animate-pulse" />
-          Click and drag directly on the canvas space to rotate skeletal projection
+          <span>Drag canvas space to rotate projection model</span>
+        </div>
+      </div>
+
+      {/* Swipeable Insights & Telemetry Cards Deck (Mobile/Tablet Only) */}
+      <div className="flex lg:hidden overflow-x-auto gap-4 scrollbar-none snap-x snap-mandatory w-full py-2 -mx-4 px-4">
+        
+        {/* Card 1: Symmetry */}
+        <div className="glass-card rounded-2xl p-5 shrink-0 w-[280px] snap-center flex flex-col justify-between h-[155px]">
+          <div className="text-[10px] text-indigo-400 uppercase tracking-wider font-extrabold flex items-center gap-1.5">
+            <Gauge className="h-4 w-4" />
+            Symmetry Indices
+          </div>
+          <div className="space-y-1.5 border-t border-[var(--border-color)] pt-3 flex-1 flex flex-col justify-center text-xs font-semibold">
+            <div className="flex justify-between">
+              <span className="text-[var(--text-secondary)]">Shoulders:</span>
+              <span className="text-emerald-500 font-mono">97.4%</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-[var(--text-secondary)]">Hips & Pelvis:</span>
+              <span className="text-emerald-500 font-mono">98.2%</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-[var(--text-secondary)]">Risk Prediction:</span>
+              <span className="text-emerald-400 uppercase font-extrabold">LOW</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Hologram controls */}
+        <div className="glass-card rounded-2xl p-5 shrink-0 w-[280px] snap-center flex flex-col justify-between h-[155px]">
+          <div className="text-[10px] text-indigo-400 uppercase tracking-wider font-extrabold flex items-center gap-1.5">
+            <Orbit className="h-4 w-4" />
+            Hologram Settings
+          </div>
+          <div className="space-y-2 border-t border-[var(--border-color)] pt-3 flex-1 flex flex-col justify-center">
+            <div className="flex flex-wrap gap-1 bg-slate-950/60 p-1 rounded-lg border border-white/5">
+              {(['normal', 'muscle', 'stress', 'pain', 'rom', 'predict'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setVisMode(mode)}
+                  className={`px-1.5 py-0.5 rounded text-[8.5px] font-extrabold uppercase transition-all ${visMode === mode ? 'bg-white/10 text-white' : 'text-slate-500'}`}
+                >
+                  {mode === 'predict' ? 'Guide' : mode === 'rom' ? 'ROM' : mode}
+                </button>
+              ))}
+            </div>
+            <div className="flex justify-between items-center text-[10px] font-semibold text-[var(--text-secondary)]">
+              <span>Compare Previous logs</span>
+              <button 
+                onClick={() => setComparisonMode(!comparisonMode)}
+                className={`w-7 h-4 rounded-full p-0.5 transition-all duration-300 relative ${comparisonMode ? 'bg-indigo-600' : 'bg-slate-800'}`}
+              >
+                <div className={`w-3.5 h-3.5 bg-white rounded-full transition-transform duration-300 ${comparisonMode ? 'translate-x-3' : 'translate-x-0'}`}></div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: Live Telemetry */}
+        <div className="glass-card rounded-2xl p-5 shrink-0 w-[280px] snap-center flex flex-col justify-between h-[155px]">
+          <div className="text-[10px] text-indigo-400 uppercase tracking-wider font-extrabold flex items-center gap-1.5">
+            <Activity className="h-4 w-4" />
+            Diagnostics Output
+          </div>
+          <div className="grid grid-cols-2 gap-2 font-mono border-t border-[var(--border-color)] pt-3 flex-1 items-center">
+            <div className="bg-slate-950/40 p-2 rounded-lg border border-slate-800/40 text-left">
+              <span className="text-[7.5px] text-slate-500 block">KNEE FLEXION</span>
+              <span className="text-cyan-400 text-xs font-black">{currentKneeAngle}°</span>
+            </div>
+            <div className="bg-slate-950/40 p-2 rounded-lg border border-slate-800/40 text-left">
+              <span className="text-[7.5px] text-slate-500 block">SHOULDER ABDUCT</span>
+              <span className="text-indigo-400 text-xs font-black">{currentShoulderAngle}°</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4: Biomechanical advice */}
+        <div className="glass-card rounded-2xl p-5 shrink-0 w-[280px] snap-center flex flex-col justify-between h-[155px]">
+          <div className="text-[10px] text-indigo-400 uppercase tracking-wider font-extrabold flex items-center gap-1.5">
+            <Info className="h-4 w-4" />
+            Target Advice
+          </div>
+          <div className="border-t border-[var(--border-color)] pt-3 flex-1 flex flex-col justify-center text-xs text-[var(--text-secondary)] font-semibold leading-snug">
+            <p className="text-white font-extrabold">{jointTelemetryData[selectedJoint === 'shoulder' ? 2 : 11]?.status || 'Nominal status'}</p>
+            <p className="pt-1 text-[10px]">{jointTelemetryData[selectedJoint === 'shoulder' ? 2 : 11]?.advice || 'Maintain current form'}</p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Accordion Controls Settings Panel (Right - 1/3) */}
+      <div className="order-last lg:order-none glass-card rounded-[24px] p-5 border border-[var(--border-color)] flex flex-col justify-between h-auto lg:h-full lg:overflow-y-auto space-y-4">
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 lg:border-none lg:pb-0">
+            <h3 className="text-xs uppercase tracking-wider text-[var(--text-secondary)] font-extrabold flex items-center gap-1.5">
+              <Sliders className="h-4 w-4 text-brand-500" />
+              Digital Twin Controls
+            </h3>
+            {/* Collapse toggle button for mobile/tablet */}
+            <button 
+              onClick={() => setIsControlsCollapsed(!isControlsCollapsed)}
+              className="lg:hidden text-[var(--text-secondary)]"
+              aria-label="Toggle parameters controls visibility"
+            >
+              {isControlsCollapsed ? <ChevronDown className="h-5 w-5" /> : <ChevronUp className="h-5 w-5" />}
+            </button>
+          </div>
+
+          <div className={`space-y-4 ${isControlsCollapsed ? 'hidden lg:block' : 'block'}`}>
+            
+            {/* Accordion Item 1: Simulation Settings */}
+            <div className="border border-[var(--border-color)] rounded-xl bg-slate-900/10 overflow-hidden">
+              <button 
+                onClick={() => setExpandedSection(expandedSection === 'simulation' ? 'camera' : 'simulation')}
+                className="w-full px-4 py-3 text-left font-extrabold text-[11px] text-[var(--text-primary)] uppercase tracking-wider bg-slate-950/20 flex justify-between items-center"
+              >
+                <span>1. Simulation Mode & Protocol</span>
+                {expandedSection === 'simulation' ? <ChevronUp className="h-4 w-4 text-slate-500" /> : <ChevronDown className="h-4 w-4 text-slate-500" />}
+              </button>
+
+              {expandedSection === 'simulation' && (
+                <div className="p-4 space-y-3">
+                  <label className="text-[9px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">
+                    Active Routine Loop
+                  </label>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {(['static', 'squat', 'abduction'] as const).map((mode) => (
+                      <button 
+                        key={mode}
+                        onClick={() => setAnimationMode(mode)}
+                        className={`py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all cursor-pointer border ${animationMode === mode ? 'bg-brand-500/10 border-brand-500 text-brand-500 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)]'}`}
+                      >
+                        {mode === 'abduction' ? 'Abduct' : mode}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="space-y-1.5 pt-2">
+                    <label className="text-[9px] text-[var(--text-secondary)] uppercase tracking-wider block font-bold">
+                      Highlight Kinematic Chain
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button 
+                        onClick={() => setSelectedJoint('shoulder')}
+                        className={`py-2 rounded-xl text-[10px] font-extrabold uppercase transition-all cursor-pointer border ${selectedJoint === 'shoulder' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)]'}`}
+                      >
+                        Shoulders
+                      </button>
+                      <button 
+                        onClick={() => setSelectedJoint('knee')}
+                        className={`py-2 rounded-xl text-[10px] font-extrabold uppercase transition-all cursor-pointer border ${selectedJoint === 'knee' ? 'bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-md' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)]'}`}
+                      >
+                        Knees
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center py-2 px-2.5 rounded-lg bg-slate-950/40 border border-[var(--border-color)] mt-2">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] font-bold text-[var(--text-primary)]">Joint Fluctuations</span>
+                      <span className="text-[8px] text-[var(--text-secondary)] font-medium">Telemetry noise</span>
+                    </div>
+                    <button 
+                      onClick={() => setTelemetryStream(!telemetryStream)}
+                      className={`w-8 h-4 rounded-full p-0.5 transition-all duration-300 relative ${telemetryStream ? 'bg-brand-500' : 'bg-slate-800'}`}
+                      aria-label="Toggle telemetry noise stream"
+                    >
+                      <div className={`w-3 h-3 bg-white rounded-full transition-transform duration-300 ${telemetryStream ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Accordion Item 2: Manual Rotation view sliders */}
+            <div className="border border-[var(--border-color)] rounded-xl bg-slate-900/10 overflow-hidden">
+              <button 
+                onClick={() => setExpandedSection(expandedSection === 'camera' ? 'data' : 'camera')}
+                className="w-full px-4 py-3 text-left font-extrabold text-[11px] text-[var(--text-primary)] uppercase tracking-wider bg-slate-950/20 flex justify-between items-center"
+              >
+                <span>2. Manual Camera Calibration</span>
+                {expandedSection === 'camera' ? <ChevronUp className="h-4 w-4 text-slate-500" /> : <ChevronDown className="h-4 w-4 text-slate-500" />}
+              </button>
+
+              {expandedSection === 'camera' && (
+                <div className="p-4 space-y-3">
+                  <div className="space-y-1 text-xs font-semibold">
+                    <div className="flex justify-between items-center text-[var(--text-primary)]">
+                      <span className="flex items-center gap-1.5 text-[9px] text-slate-400">
+                        <Orbit className="h-3.5 w-3.5 text-indigo-500" /> Yaw Rotation
+                      </span>
+                      <span className="text-[9px] bg-slate-900/60 px-1.5 py-0.5 rounded font-mono border border-white/5">{yaw}°</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="360" 
+                      value={yaw}
+                      onChange={(e) => {
+                        targetYaw.current = parseInt(e.target.value);
+                        setYaw(parseInt(e.target.value));
+                      }}
+                      className="w-full h-1 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-indigo-500 border border-white/5"
+                    />
+                  </div>
+
+                  <div className="space-y-1 text-xs font-semibold">
+                    <div className="flex justify-between items-center text-[var(--text-primary)]">
+                      <span className="flex items-center gap-1.5 text-[9px] text-slate-400">
+                        <Compass className="h-3.5 w-3.5 text-brand-500" /> Pitch Rotation
+                      </span>
+                      <span className="text-[9px] bg-slate-900/60 px-1.5 py-0.5 rounded font-mono border border-white/5">{pitch}°</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="-45" 
+                      max="45" 
+                      value={pitch}
+                      onChange={(e) => {
+                        targetPitch.current = parseInt(e.target.value);
+                        setPitch(parseInt(e.target.value));
+                      }}
+                      className="w-full h-1 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-500 border border-white/5"
+                    />
+                  </div>
+
+                  <div className="space-y-1 text-xs font-semibold">
+                    <div className="flex justify-between items-center text-[var(--text-primary)]">
+                      <span className="flex items-center gap-1.5 text-[9px] text-slate-400">
+                        <ZoomIn className="h-3.5 w-3.5 text-emerald-500" /> Zoom scale
+                      </span>
+                      <span className="text-[9px] bg-slate-900/60 px-1.5 py-0.5 rounded font-mono border border-white/5">{zoom.toFixed(2)}x</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0.6" 
+                      max="1.8" 
+                      step="0.05"
+                      value={zoom}
+                      onChange={(e) => {
+                        targetZoom.current = parseFloat(e.target.value);
+                        setZoom(parseFloat(e.target.value));
+                      }}
+                      className="w-full h-1 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-500 border border-white/5"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Accordion Item 3: Live telemetry indices details */}
+            <div className="border border-[var(--border-color)] rounded-xl bg-slate-900/10 overflow-hidden">
+              <button 
+                onClick={() => setExpandedSection(expandedSection === 'data' ? 'simulation' : 'data')}
+                className="w-full px-4 py-3 text-left font-extrabold text-[11px] text-[var(--text-primary)] uppercase tracking-wider bg-slate-950/20 flex justify-between items-center"
+              >
+                <span>3. Live Biometrics Data</span>
+                {expandedSection === 'data' ? <ChevronUp className="h-4 w-4 text-slate-500" /> : <ChevronDown className="h-4 w-4 text-slate-500" />}
+              </button>
+
+              {expandedSection === 'data' && (
+                <div className="p-4 space-y-3 font-mono">
+                  <div className="p-3.5 rounded-xl bg-slate-950 border border-[var(--border-color)] space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5 font-sans">
+                        <Activity className={`h-3 w-3 ${telemetryStream ? 'text-emerald-500 animate-pulse' : 'text-slate-500'}`} />
+                        Diagnostics
+                      </span>
+                      <span className="text-[8px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                        Active
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[10px] font-mono font-bold leading-normal">
+                      <div className="bg-slate-950/40 p-2 rounded-lg border border-slate-800/40">
+                        <div className="text-[8px] text-slate-500">Knee flexion</div>
+                        <div className="text-cyan-400 text-sm mt-0.5">{currentKneeAngle}°</div>
+                      </div>
+                      <div className="bg-slate-950/40 p-2 rounded-lg border border-slate-800/40">
+                        <div className="text-[8px] text-slate-500">Shoulder Abduct</div>
+                        <div className="text-indigo-400 text-sm mt-0.5">{currentShoulderAngle}°</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-[var(--border-color)] space-y-1 hidden lg:block">
+          <div className="text-[8.5px] uppercase tracking-wider text-slate-500 font-bold">Calibration Note</div>
+          <p className="text-[9.5px] text-[var(--text-secondary)] leading-relaxed font-semibold">
+            Biomechanical angles calculates joint extensions relative to on-device landmarks at 30 FPS. Drag mesh screen directly to inspect skeletal points.
+          </p>
         </div>
       </div>
 
     </div>
   );
 };
+
